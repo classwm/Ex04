@@ -43,12 +43,19 @@ class Shot extends Thread {
         while (okno.takenPoint == 0) {
             okno.prevBallY = okno.ballY;
             okno.ballY += (ballSpeed * okno.ballDirection);
+            System.out.println(okno.ballY);
             if (okno.ballY <= 0) {
                 okno.takenPoint = 1;
                 okno.pOneScore++;
             } else if (okno.ballY >= okno.windowHeight) {
                 okno.takenPoint = -1;
                 okno.pTwoScore++;
+            } else if (okno.ballDirection == -1 && okno.ballY == okno.pTwoY && okno.ballX >= (okno.pTwoX - (okno.ballRadius / 2 )) && okno.ballX <= (okno.pTwoX + okno.pWidth + (okno.ballRadius / 2 ))) {
+                okno.ballDirection = 1;
+                Toolkit.getDefaultToolkit().beep();
+            } else if (okno.ballDirection == 1 && okno.ballY == okno.pOneY && okno.ballX >= (okno.pOneX - (okno.ballRadius / 2 )) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballRadius / 2 ))) {
+                okno.ballDirection = -1;
+                Toolkit.getDefaultToolkit().beep();
             }
             try {
                 Thread.sleep(60);
@@ -79,7 +86,9 @@ class MyListener extends MouseAdapter {
 
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == 1) {
-            okno.shot();
+            if (okno.servOne) {
+                okno.shot();
+            }
         }
     }
 
@@ -137,7 +146,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         if (ballDirection == 0) {
             if (servOne) {
                 ballX = (pOneX + (pWidth / 2)) - (ballRadius / 2);
-                ballY = pOneY - ballRadius - 1;
+                ballY = pOneY - ballRadius;
                 ballDirection = -1;
                 new Shot(this).start();
             } else if (servTwo) {
@@ -186,7 +195,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
         if (ballDirection == 0 && servOne) {
             // g.clearRect(ballX - (ballRadius / 2), prevBallY - (ballRadius / 2), ballRadius * 2, ballRadius * 2);
-            g.fillOval(pOneX + pWidth / 2 - ballRadius / 2, pOneY - ballRadius - 1, ballRadius, ballRadius);
+            g.fillOval(pOneX + pWidth / 2 - ballRadius / 2, pOneY - ballRadius, ballRadius, ballRadius);
         }
 
         if (ballDirection == 0 && servTwo) {
