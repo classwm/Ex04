@@ -11,17 +11,17 @@ import javax.swing.*;
  */
 //class NewStrzal extends Thread {
 //
-//    int x_strzal, y_strzal, h_strzal = 10;
+//    int ballX, ballY, ballRadius = 10;
 //    NewProg21 okno;
-//    int predkosc = 15;
+//    int ballSpeed = 15;
 //
 //    NewStrzal(NewProg21 okno) {
 //        this.okno = okno;
 //    }
 //
 //    public void run() {
-//        while (y_strzal > 0) {
-//            y_strzal -= predkosc;
+//        while (ballY > 0) {
+//            ballY -= ballSpeed;
 //            try {
 //                Thread.sleep(40);
 //            } catch (Exception e) {
@@ -30,28 +30,27 @@ import javax.swing.*;
 //        okno.list.remove(this);
 //    }
 //}
-
-class Strzal extends Thread {
+class Shot extends Thread {
 
     NewProg21 okno;
-    int predkosc = 45;
+    int ballSpeed = 0 + okno.ballRadius;
 
-    Strzal(NewProg21 okno) {
+    Shot(NewProg21 okno) {
         this.okno = okno;
     }
 
     public void run() {
-        while (okno.y_strzal > 0) {
-            okno.y_strzal -= predkosc;
+        while (okno.ballY > 0) {
+            okno.prevBallY = okno.ballY;
+            okno.ballY -= ballSpeed;
             try {
-                Thread.sleep(50);
+                Thread.sleep(60);
             } catch (Exception e) {
-            };
+            }
         }
-        okno.jestStrzal = false;
+        okno.isBall = false;
     }
 }
-
 
 class MyListener extends MouseAdapter {
 
@@ -63,7 +62,7 @@ class MyListener extends MouseAdapter {
 
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == 1) {
-            okno.strzal();
+            okno.shot();
         }
     }
 
@@ -80,13 +79,12 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
     int windowWidth = 500, windowHeight = 600;
     int pOneX = 200, pOneY = 500, pTwoX = 200, pTwoY = 100, pWidth = 50, pHeight = 10;
-    int prevOneX, prevTwoX = 0;
-    boolean isMoveOne, isMoveTwo = true;
+    int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     int pSpeed = 5;
-    static int x_strzal, y_strzal, h_strzal = 10;
-    static boolean jestStrzal = false;
-    // List<NewStrzal> list = new LinkedList<NewStrzal>();
+    boolean isMoveOne = false, isMoveTwo = false, isBall = false, servOne = true, servTwo = true;
+    static int ballX, ballY, ballRadius = 10;
 
+    // List<NewStrzal> list = new LinkedList<NewStrzal>();
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("Super Gra -- :)...");
         okno.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -113,46 +111,66 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     }
 
     /**
-     * Inicjalizacja strzalu - uruchomienie watka zmieniajacego wspolrzedne strzalu.
+     * Inicjalizacja strzalu - uruchomienie watka zmieniajacego wspolrzedne
+     * strzalu.
      */
-    void strzal() {
-        if (!jestStrzal) {
-            x_strzal = pOneX + pWidth / 2 - h_strzal / 2;
-            y_strzal = pOneY - h_strzal;
-            jestStrzal = true;
-            new Strzal(this).start();
+    void shot() {
+        if (!isBall) {
+            // ballX = pOneX + pWidth / 2 - ballRadius / 2;
+            // ballY = pOneY - ballRadius * 2;
+            isBall = true;
+            new Shot(this).start();
         }
     }
-
 
     void moveP2(int pDirection) {
         if (pDirection == 1 && pTwoX < windowWidth - pWidth) {
             prevTwoX = pTwoX;
             pTwoX += (pDirection * pSpeed);
-            isMoveTwo = true;            
-        } else
-            if (pDirection == -1 && pTwoX > 0) {
+            isMoveTwo = true;
+        } else if (pDirection == -1 && pTwoX > 0) {
             prevTwoX = pTwoX;
             pTwoX += (pDirection * pSpeed);
-            isMoveTwo = true;            
+            isMoveTwo = true;
         }
     }
 
     public void paint(Graphics g) { // metoda odrysowujaca ekran
-        if (isMoveTwo) {
-            g.clearRect(prevTwoX, pTwoY, pWidth, pHeight);
-            isMoveTwo = false;
-        }
-        if (isMoveOne) {
+        
+        if (isMoveOne && !servOne) {
             g.clearRect(prevOneX, pOneY, pWidth, pHeight);
             isMoveOne = false;
         }
+        if (isMoveOne && servOne) {
+            g.clearRect(prevOneX, pOneY - ballRadius, pWidth, pHeight + ballRadius);
+            isMoveOne = false;
+        }
+                
+        if (isMoveTwo && !servTwo) {
+            g.clearRect(prevTwoX, pTwoY, pWidth, pHeight);
+            isMoveTwo = false;
+        }
+        if (isMoveTwo && servTwo) {
+            g.clearRect(prevTwoX, pTwoY, pWidth, pHeight + ballRadius);
+            isMoveTwo = false;
+        }
+        
         g.fillRect(pTwoX, pTwoY, pWidth, pHeight);
         g.fillRect(pOneX, pOneY, pWidth, pHeight);
 
+        if (!isBall && servOne) {
+            // g.clearRect(ballX - (ballRadius / 2), prevBallY - (ballRadius / 2), ballRadius * 2, ballRadius * 2);
+            g.fillOval(pOneX + pWidth / 2 - ballRadius / 2, pOneY - ballRadius - 1, ballRadius, ballRadius);
+        }
 
-        if (jestStrzal) {
-            g.fillOval(x_strzal, y_strzal, h_strzal, h_strzal);
+        if (!isBall && servTwo) {
+            // g.clearRect(ballX - (ballRadius / 2), prevBallY - (ballRadius / 2), ballRadius * 2, ballRadius * 2);
+            g.fillOval(pTwoX + pWidth / 2 - ballRadius / 2, pTwoY + ballRadius, ballRadius, ballRadius);
+        }
+
+        if (isBall) {
+            g.clearRect(ballX - (ballRadius / 2), prevBallY - (ballRadius / 2), ballRadius * 2, ballRadius * 2);
+            g.fillOval(pOneX, ballY, ballRadius, ballRadius);
         }
 
 
@@ -186,7 +204,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 moveP2(1);
                 break;
             case KeyEvent.VK_SPACE:
-                strzal();
+                shot();
                 break;
             case KeyEvent.VK_ESCAPE:
                 System.exit(0);
