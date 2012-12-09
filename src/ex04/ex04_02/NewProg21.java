@@ -2,34 +2,9 @@ package ex04.ex04_02;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.*;
 
-/**
- * Klasa obiektu odpowiedzalnego za zmiane współrzednych strzału.
- */
-//class NewStrzal extends Thread {
-//
-//    int ballX, ballY, ballRadius = 10;
-//    NewProg21 okno;
-//    int ballSpeed = 15;
-//
-//    NewStrzal(NewProg21 okno) {
-//        this.okno = okno;
-//    }
-//
-//    public void run() {
-//        while (ballY > 0) {
-//            ballY -= ballSpeed;
-//            try {
-//                Thread.sleep(40);
-//            } catch (Exception e) {
-//            };
-//        }
-//        okno.list.remove(this);
-//    }
-//}
+
 class Shot extends Thread {
 
     NewProg21 okno;
@@ -109,7 +84,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     int pSpeed = 5;
     boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true;
-    static int ballX, ballY, ballRadius = 10, ballDirection = 0;
+    static int ballX, ballY, ballRadius = 10, ballDirection = 0, ballAngle = 0;
     int takenPoint = 0;
 
     // List<NewStrzal> list = new LinkedList<NewStrzal>();
@@ -148,15 +123,35 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 ballX = (pOneX + (pWidth / 2)) - (ballRadius / 2);
                 ballY = pOneY - ballRadius;
                 ballDirection = -1;
+                ballAngle = pOneStartAngle();
                 new Shot(this).start();
             } else if (servTwo) {
                 ballX = pTwoX + pWidth / 2 - ballRadius / 2;
                 ballY = pTwoY + ballRadius;
                 ballDirection = 1;
+                ballAngle = pTwoStartAngle();
                 new Shot(this).start();
             }
         }
     }
+    
+    
+    int pOneStartAngle() {
+        int pOneXmid = pOneX + (pWidth / 2 );
+        int windowMid = windowWidth / 2;
+        if (pOneXmid > windowMid) return 1;
+        if (pOneXmid < windowMid) return -1; 
+        return 0;
+    }
+    
+    int pTwoStartAngle() {
+        int pTwoXmid = pTwoX + (pWidth / 2 );
+        int windowMid = windowWidth / 2;
+        if (pTwoXmid > windowMid) return 1;
+        if (pTwoXmid < windowMid) return -1; 
+        return 0;
+    }
+            
 
     void moveP2(int pDirection) {
         if (pDirection == 1 && pTwoX < windowWidth - pWidth) {
