@@ -46,9 +46,11 @@ class MyListener extends MouseAdapter {
     }
 
     public void mouseMoved(MouseEvent e) {
-        okno.prevX = okno.x;
-        okno.x = e.getX();
-        okno.isMove = true;
+        if (e.getX() < okno.w - okno.szerokosc) {
+            okno.prevX = okno.x;
+            okno.x = e.getX();
+            okno.isMove = true;
+        }
     }
 }
 
@@ -105,18 +107,26 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
 //        x += (kierunek * predkosc);
 //    }
     void przesun2(int kierunek) {
-        prevX2 = x2;
-        x2 += (kierunek * predkosc);
-        isMove2 = true;
+        if (kierunek == 1 && x2 < w - szerokosc) {
+            prevX2 = x2;
+            x2 += (kierunek * predkosc);
+            isMove2 = true;            
+            System.out.println("prawo: " + x2);
+            
+        } else
+            if (kierunek == -1 && x2 > 0) {
+            prevX2 = x2;
+            x2 += (kierunek * predkosc);
+            isMove2 = true;
+            System.out.println("lewo: " + x2);
+        }
     }
 
     public void paint(Graphics g) { // metoda odrysowujaca ekran
         if (isMove2) {
             g.clearRect(prevX2, y2, szerokosc, wysokosc);
-
             isMove2 = false;
         }
-
         if (isMove) {
             g.clearRect(prevX, y, szerokosc, wysokosc);
             isMove2 = false;
