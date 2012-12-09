@@ -50,10 +50,10 @@ class Shot extends Thread {
             } else if (okno.ballY >= okno.windowHeight) {
                 okno.takenPoint = -1;
                 okno.pTwoScore++;
-            } else if (okno.ballDirection == -1 && okno.ballY == okno.pTwoY && okno.ballX >= (okno.pTwoX - (okno.ballRadius / 2 )) && okno.ballX <= (okno.pTwoX + okno.pWidth + (okno.ballRadius / 2 ))) {
+            } else if (okno.ballDirection == -1 && okno.ballY == (okno.pTwoY + okno.ballRadius) && okno.ballX >= (okno.pTwoX - (okno.ballRadius / 2 )) && okno.ballX <= (okno.pTwoX + okno.pWidth + (okno.ballRadius / 2 ))) {
                 okno.ballDirection = 1;
                 Toolkit.getDefaultToolkit().beep();
-            } else if (okno.ballDirection == 1 && okno.ballY == okno.pOneY && okno.ballX >= (okno.pOneX - (okno.ballRadius / 2 )) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballRadius / 2 ))) {
+            } else if (okno.ballDirection == 1 && okno.ballY == (okno.pOneY - okno.ballRadius) && okno.ballX >= (okno.pOneX - (okno.ballRadius / 2 )) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballRadius / 2 ))) {
                 okno.ballDirection = -1;
                 Toolkit.getDefaultToolkit().beep();
             }
