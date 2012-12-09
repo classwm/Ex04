@@ -40,18 +40,32 @@ class Shot extends Thread {
     }
 
     public void run() {
-        while (okno.ballY > 0 & okno.ballY < okno.windowHeight) {
-            if (okno.ballY != okno.pTwoY) {
-                okno.prevBallY = okno.ballY;
-            okno.ballY -= ballSpeed;
+        while (okno.takenPoint == 0) {
+            okno.prevBallY = okno.ballY;
+            okno.ballY += (ballSpeed * okno.ballDirection);
+            if (okno.ballY <= 0) {
+                okno.takenPoint = 1;
+                okno.pOneScore++;
+            } else if (okno.ballY >= okno.windowHeight) {
+                okno.takenPoint = -1;
+                okno.pTwoScore++;
+            }
             try {
                 Thread.sleep(60);
             } catch (Exception e) {
             }
-            }
-            
+        }
+        System.out.println("Player1: " + okno.pOneScore + " - Player2: " + okno.pTwoScore);
+        if (okno.takenPoint == 1) {
+            okno.servOne = false;
+            okno.servTwo = true;
+        }
+        if (okno.takenPoint == -1) {
+            okno.servOne = true;
+            okno.servTwo = false;
         }
         okno.ballDirection = 0;
+        okno.takenPoint = 0;
     }
 }
 
@@ -82,10 +96,12 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
     int windowWidth = 500, windowHeight = 600;
     int pOneX = 200, pOneY = 500, pTwoX = 200, pTwoY = 100, pWidth = 50, pHeight = 10;
+    int pOneScore = 0, pTwoScore = 0;
     int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     int pSpeed = 5;
-    boolean isMoveOne = false, isMoveTwo = false, servOne = true, servTwo = false;
+    boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true;
     static int ballX, ballY, ballRadius = 10, ballDirection = 0;
+    int takenPoint = 0;
 
     // List<NewStrzal> list = new LinkedList<NewStrzal>();
     public static void main(String[] args) {
@@ -215,7 +231,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 break;
             case KeyEvent.VK_SPACE:
                 if (servTwo) {
-                shot();
+                    shot();
                 }
                 break;
             case KeyEvent.VK_ESCAPE:
