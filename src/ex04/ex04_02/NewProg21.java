@@ -40,15 +40,18 @@ class Shot extends Thread {
     }
 
     public void run() {
-        while (okno.ballY > 0) {
-            okno.prevBallY = okno.ballY;
+        while (okno.ballY > 0 & okno.ballY < okno.windowHeight) {
+            if (okno.ballY != okno.pTwoY) {
+                okno.prevBallY = okno.ballY;
             okno.ballY -= ballSpeed;
             try {
                 Thread.sleep(60);
             } catch (Exception e) {
             }
+            }
+            
         }
-        okno.isBall = false;
+        okno.ballDirection = 0;
     }
 }
 
@@ -81,8 +84,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     int pOneX = 200, pOneY = 500, pTwoX = 200, pTwoY = 100, pWidth = 50, pHeight = 10;
     int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     int pSpeed = 5;
-    boolean isMoveOne = false, isMoveTwo = false, isBall = false, servOne = true, servTwo = true;
-    static int ballX, ballY, ballRadius = 10;
+    boolean isMoveOne = false, isMoveTwo = false, servOne = true, servTwo = false;
+    static int ballX, ballY, ballRadius = 10, ballDirection = 0;
 
     // List<NewStrzal> list = new LinkedList<NewStrzal>();
     public static void main(String[] args) {
@@ -115,11 +118,18 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
      * strzalu.
      */
     void shot() {
-        if (!isBall) {
-            // ballX = pOneX + pWidth / 2 - ballRadius / 2;
-            // ballY = pOneY - ballRadius * 2;
-            isBall = true;
-            new Shot(this).start();
+        if (ballDirection == 0) {
+            if (servOne) {
+                ballX = (pOneX + (pWidth / 2)) - (ballRadius / 2);
+                ballY = pOneY - ballRadius - 1;
+                ballDirection = -1;
+                new Shot(this).start();
+            } else if (servTwo) {
+                ballX = pTwoX + pWidth / 2 - ballRadius / 2;
+                ballY = pTwoY + ballRadius;
+                ballDirection = 1;
+                new Shot(this).start();
+            }
         }
     }
 
@@ -136,7 +146,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     }
 
     public void paint(Graphics g) { // metoda odrysowujaca ekran
-        
+
         if (isMoveOne && !servOne) {
             g.clearRect(prevOneX, pOneY, pWidth, pHeight);
             isMoveOne = false;
@@ -145,7 +155,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             g.clearRect(prevOneX, pOneY - ballRadius, pWidth, pHeight + ballRadius);
             isMoveOne = false;
         }
-                
+
         if (isMoveTwo && !servTwo) {
             g.clearRect(prevTwoX, pTwoY, pWidth, pHeight);
             isMoveTwo = false;
@@ -154,23 +164,23 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             g.clearRect(prevTwoX, pTwoY, pWidth, pHeight + ballRadius);
             isMoveTwo = false;
         }
-        
+
         g.fillRect(pTwoX, pTwoY, pWidth, pHeight);
         g.fillRect(pOneX, pOneY, pWidth, pHeight);
 
-        if (!isBall && servOne) {
+        if (ballDirection == 0 && servOne) {
             // g.clearRect(ballX - (ballRadius / 2), prevBallY - (ballRadius / 2), ballRadius * 2, ballRadius * 2);
             g.fillOval(pOneX + pWidth / 2 - ballRadius / 2, pOneY - ballRadius - 1, ballRadius, ballRadius);
         }
 
-        if (!isBall && servTwo) {
+        if (ballDirection == 0 && servTwo) {
             // g.clearRect(ballX - (ballRadius / 2), prevBallY - (ballRadius / 2), ballRadius * 2, ballRadius * 2);
             g.fillOval(pTwoX + pWidth / 2 - ballRadius / 2, pTwoY + ballRadius, ballRadius, ballRadius);
         }
 
-        if (isBall) {
-            g.clearRect(ballX - (ballRadius / 2), prevBallY - (ballRadius / 2), ballRadius * 2, ballRadius * 2);
-            g.fillOval(pOneX, ballY, ballRadius, ballRadius);
+        if (ballDirection != 0) {
+            g.clearRect(ballX, prevBallY, ballRadius, ballRadius);
+            g.fillOval(ballX, ballY, ballRadius, ballRadius);
         }
 
 
@@ -204,7 +214,9 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 moveP2(1);
                 break;
             case KeyEvent.VK_SPACE:
+                if (servTwo) {
                 shot();
+                }
                 break;
             case KeyEvent.VK_ESCAPE:
                 System.exit(0);
