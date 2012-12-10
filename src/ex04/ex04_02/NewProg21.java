@@ -42,7 +42,7 @@ class Shot extends Thread {
                 Toolkit.getDefaultToolkit().beep();
             }
             try {
-                Thread.sleep(60);
+                Thread.sleep(70);
             } catch (Exception e) {
             }
         }
@@ -55,8 +55,10 @@ class Shot extends Thread {
             okno.servOne = true;
             okno.servTwo = false;
         }
+        
         okno.ballDirection = 0;
         okno.takenPoint = 0;
+        okno.isNewServ = true;
     }
 }
 
@@ -87,16 +89,20 @@ class MyListener extends MouseAdapter {
 
 public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
-    int windowWidth = 500, windowHeight = 600;
-    int pWidth = 50, pHeight = 10, pOneX = (windowWidth / 2) - (pWidth / 2), pOneY = 500, pTwoX = (windowWidth / 2) - (pWidth / 2), pTwoY = 100;
+    int windowWidth = 800, windowHeight = 800;
+    int pWidth = 50, pHeight = 10;
+    int windowMid = windowWidth / 2, toWindowCenter = windowMid - (pWidth / 2 );
+    int pOneX = toWindowCenter, pOneY = (windowHeight - 100), pTwoX = toWindowCenter, pTwoY = (windowHeight - (windowHeight - 100));
     int pOneScore = 0, pTwoScore = 0;
     int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
-    int pSpeed = 5;
-    boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true;
+    int pSpeed = 10;
+    boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
     static int ballX, ballY, ballRadius = 10, ballDirection = 0, ballAngle = 0;
     int takenPoint = 0;
+        
+    
 
-    // List<NewStrzal> list = new LinkedList<NewStrzal>();
+    
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("Super Gra -- :)...");
         okno.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -145,17 +151,15 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     }
     
     
-    int pOneStartAngle() {
+    int pOneStartAngle() { 
         int pOneXmid = pOneX + (pWidth / 2 );
-        int windowMid = windowWidth / 2;
         if (pOneXmid > windowMid) return 1;
         if (pOneXmid < windowMid) return -1; 
         return 0;
     }
     
-    int pTwoStartAngle() {
+    int pTwoStartAngle() {  
         int pTwoXmid = pTwoX + (pWidth / 2 );
-        int windowMid = windowWidth / 2;
         if (pTwoXmid > windowMid) return 1;
         if (pTwoXmid < windowMid) return -1; 
         return 0;
@@ -192,6 +196,13 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         if (isMoveTwo && servTwo) {
             g.clearRect(prevTwoX, pTwoY, pWidth, pHeight + ballRadius);
             isMoveTwo = false;
+        }
+        
+        if (isNewServ) {
+            g.clearRect(0, 0, windowWidth, windowHeight);
+            pOneX = toWindowCenter;
+            pTwoX = toWindowCenter;
+            isNewServ = false;
         }
 
         g.fillRect(pTwoX, pTwoY, pWidth, pHeight);
