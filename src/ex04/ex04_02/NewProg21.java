@@ -15,6 +15,7 @@ class Shot extends Thread {
     }
 
     public void run() {
+                
         while (okno.takenPoint == 0) {
             okno.prevBallY = okno.ballY;
             okno.prevBallX = okno.ballX;
@@ -44,9 +45,9 @@ class Shot extends Thread {
             } else if (okno.ballDirection == 1 && okno.ballY == (okno.pOneY - okno.ballDiameter) && okno.ballX >= (okno.pOneX - (okno.ballDiameter / 2)) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballDiameter / 2))) {
                 okno.ballDirection = -1;
                 if (okno.ballAngle == 0) {
-                    if (okno.ballX > (okno.pOneX + (okno.pWidth / 2)) + (okno.ballDiameter / 2)) {
+                    if (okno.ballX > (okno.pOneX + (okno.pWidth / 2)) + (okno.ballDiameter / 5)) {
                         okno.ballAngle = 1;
-                    } else if (okno.ballX < (okno.pOneX + (okno.pWidth / 2)) - (okno.ballDiameter / 2)) {
+                    } else if (okno.ballX < (okno.pOneX + (okno.pWidth / 2)) - (okno.ballDiameter)) {
                         okno.ballAngle = -1;
                     }
                 }
@@ -108,9 +109,11 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     protected static int pOneScore = 0, pTwoScore = 0;
     protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     protected int pSpeed = 12;
-    protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
+    protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false,
+            gameOver = false;
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;
+    
 
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("Super Gra -- :)...");
@@ -123,14 +126,14 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         JPanel pane = (JPanel) score.getContentPane();
         score.setVisible(true);
         new Thread(score).start();
+        score.ballTimer.start();
 
         okno.setVisible(true);
         new Thread(okno).start();
         okno.addKeyListener(okno);
         MyListener mListener = new MyListener(okno);
         okno.addMouseListener(mListener);
-        okno.addMouseMotionListener(mListener);
-
+        okno.addMouseMotionListener(mListener);        
     }
 
     NewProg21(String tytul) {
@@ -150,6 +153,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
      * Inicjalizacja strzalu - uruchomienie watka zmieniajacego wspolrzedne
      * strzalu.
      */
+    
+    
     void shot() {
         if (ballDirection == 0) {
             if (servOne) {
@@ -250,13 +255,13 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         }
     } // paint
 
-    public void run() { // metoda watka odswierzajacego ekran
+    public void run() { // metoda wątku odświeżającego ekran
         while (true) {
             repaint();
             try {
                 Thread.sleep(1);
             } catch (Exception e) {
-            };
+            }
         }
     }
 //obsluga zdarzen z klawiatury
@@ -277,13 +282,13 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             case KeyEvent.VK_RIGHT:
                 moveP2(1);
                 break;
-            case KeyEvent.VK_SPACE:
+            case KeyEvent.VK_SPACE:                
                 if (servTwo) {
                     shot();
                 }
                 break;
             case KeyEvent.VK_ESCAPE:
-                System.exit(0);
+                gameOver = true;
                 break;
         }
     }

@@ -2,6 +2,8 @@ package ex04.co04_02;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.*;
 
 /**
@@ -9,8 +11,9 @@ import javax.swing.*;
  */
 class Strzal extends Thread {
 
+    // int x_strzal, y_strzal, h_strzal = 10;
     Prog21 okno;
-    int predkosc = 45;
+    int predkosc = 10;
 
     Strzal(Prog21 okno) {
         this.okno = okno;
@@ -22,17 +25,42 @@ class Strzal extends Thread {
             try {
                 Thread.sleep(50);
             } catch (Exception e) {
-            };
+                System.out.println(e);
+            }
         }
         okno.jestStrzal = false;
+    }
+}
+
+class MyListener extends MouseAdapter {
+
+    private Prog21 okno;
+
+    public MyListener(Prog21 okno) {
+        this.okno = okno;
+    }
+
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton() == 1) {
+            okno.strzal();
+        }
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        if (e.getX() < (okno.w - okno.szerokosc)) {
+            okno.x = e.getX();
+        }
     }
 }
 
 public class Prog21 extends JFrame implements KeyListener, Runnable {
 
     int w = 500, h = 500;
-    int x = 200, y = 400, szerokosc = 60, wysokosc = 15;
-    int predkosc = 20;
+    //paletka1
+    int x = 200, y = 400, szerokosc = 50, wysokosc = 10;
+    int predkosc = 5;
+    //paletka2
+    int x2 = 400, y2 = 100;
     static int x_strzal, y_strzal, h_strzal = 10;
     static boolean jestStrzal = false;
 
@@ -44,6 +72,10 @@ public class Prog21 extends JFrame implements KeyListener, Runnable {
         new Thread(okno).start();
 
         okno.addKeyListener(okno);
+
+        MyListener mListener = new MyListener(okno);
+        okno.addMouseListener(mListener);
+        okno.addMouseMotionListener(mListener);
     }
 
     Prog21(String tytul) {
@@ -67,25 +99,38 @@ public class Prog21 extends JFrame implements KeyListener, Runnable {
             jestStrzal = true;
             new Strzal(this).start();
         }
+
     }
+//
+//    void przesun(int kierunek) {
+//        x += (kierunek * predkosc);
+//    }
 
     void przesun(int kierunek) {
-        x += (kierunek * predkosc);
+        if (kierunek == 1 && x2 < w - szerokosc) {
+            x2 += (kierunek * predkosc);
+        } else if (kierunek == -1 && x2 > 0) {
+            x2 += (kierunek * predkosc);
+        }
+
     }
 
     public void paint(Graphics g) { // metoda odrysowujaca ekran
         g.clearRect(0, 0, w, h);
         g.fillRect(x, y, szerokosc, wysokosc);
+        g.fillRect(x2, y2, szerokosc, wysokosc);
         if (jestStrzal) {
             g.fillOval(x_strzal, y_strzal, h_strzal, h_strzal);
         }
+
+
     }
 
-    public void run() { // metoda watka odswierzajacego ekran
+    public void run() { // metoda watka odswiezajacego ekran
         while (true) {
             repaint();
             try {
-                Thread.sleep(20);
+                Thread.sleep(50);
             } catch (Exception e) {
             };
         }
@@ -100,7 +145,7 @@ public class Prog21 extends JFrame implements KeyListener, Runnable {
         // te metode zostawie jako pusta
     }
 
-    public void keyPressed(KeyEvent e) { // reaguje jedynie na przycisniecie klawisza
+    public void keyPressed(KeyEvent e) { // reaguje na samo przycisniecie klawisza
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 przesun(-1);
@@ -116,4 +161,4 @@ public class Prog21 extends JFrame implements KeyListener, Runnable {
                 break;
         }
     }
-}
+} //NewProg21
