@@ -3,7 +3,7 @@ package ex04.ex04_02;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+
 
 class Shot extends Thread {
 
@@ -98,18 +98,19 @@ class MyListener extends MouseAdapter {
     }
 }
 
+
 public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
-    static int windowWidth = 800, windowHeight = 800;
-    int pWidth = 50, pHeight = 10;
-    int windowMid = windowWidth / 2, toWindowCenter = windowMid - (pWidth / 2);
-    int pOneX = toWindowCenter, pOneY = (windowHeight - 100), pTwoX = toWindowCenter, pTwoY = (windowHeight - (windowHeight - 100));
-    static int pOneScore = 0, pTwoScore = 0;
-    int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
-    int pSpeed = 12;
-    boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
-    static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
-    int takenPoint = 0;
+    protected static int windowWidth = 800, windowHeight = 800;
+    protected int pWidth = 50, pHeight = 10;
+    protected int windowMid = windowWidth / 2, toWindowCenter = windowMid - (pWidth / 2);
+    protected int pOneX = toWindowCenter, pOneY = (windowHeight - 100), pTwoX = toWindowCenter, pTwoY = (windowHeight - (windowHeight - 100));
+    protected static int pOneScore = 0, pTwoScore = 0;
+    protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
+    protected int pSpeed = 12;
+    protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
+    protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
+    protected int takenPoint = 0;
 
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("Super Gra -- :)...");
@@ -136,44 +137,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         super(tytul);
     }
 
-    static class scoreWindow extends JFrame implements Runnable {
-        int scoreWidth = 300, scoreHeight = 180;
-        int scorePositionX = windowWidth + 100, scorePositionY = 200; 
-        public void paint(Graphics g) {
-            g.clearRect(0, 0, 300, 180);
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("SansSerif",
-                    Font.BOLD, 20));
-            g.drawString("PLAYER 1:", 15, 60);
-            g.drawString("PLAYER 2:", 180, 60);
-            g.setFont(new Font("SansSerif",
-                    Font.BOLD, 100));
-            g.drawString(Integer.toString(pOneScore), 50, 150);
-            g.drawString(Integer.toString(pTwoScore), 220, 150);
-
-        }
-
-        public void run() { // metoda watka odswierzajacego 2ekran
-            while (true) {
-                repaint();
-                try {
-                    Thread.sleep(500);
-                } catch (Exception e) {
-                }
-            } // 
-        } // score run
-
-        void initScore() {
-            setTitle("Wynik Super Gry :)");
-            pack();
-            setLocation(scorePositionX, scorePositionY);
-            setSize(scoreWidth, scoreHeight);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
-            setAlwaysOnTop(true);
-            setResizable(false);
-            setBackground(Color.YELLOW);
-        }
-    } //scoreWindow
+    
 
     void init() {
         Container cp = getContentPane();
