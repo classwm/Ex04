@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-
 class Shot extends Thread {
 
     NewProg21 okno;
@@ -15,7 +14,7 @@ class Shot extends Thread {
     }
 
     public void run() {
-                
+
         while (okno.takenPoint == 0) {
             okno.prevBallY = okno.ballY;
             okno.prevBallX = okno.ballX;
@@ -54,8 +53,13 @@ class Shot extends Thread {
                 Toolkit.getDefaultToolkit().beep();
             }
             try {
-                Thread.sleep(60);
-            } catch (Exception e) {
+                do {
+                    Thread.sleep(60);
+                    // do nothing
+                } while (okno.gamePause);
+            } catch (Exception ex) {
+                System.out.println("Wyjątek w Shot.run");
+                System.out.println(ex);
             }
         }
         System.out.println("Player1: " + okno.pOneScore + " - Player2: " + okno.pTwoScore);
@@ -91,14 +95,15 @@ class MyListener extends MouseAdapter {
     }
 
     public void mouseMoved(MouseEvent e) {
-        if (e.getX() < okno.windowWidth - okno.pWidth) {
-            okno.prevOneX = okno.pOneX;
-            okno.pOneX = e.getX();
-            okno.isMoveOne = true;
+        if (!okno.gamePause) {
+            if (e.getX() < okno.windowWidth - okno.pWidth) {
+                okno.prevOneX = okno.pOneX;
+                okno.pOneX = e.getX();
+                okno.isMoveOne = true;
+            }
         }
     }
 }
-
 
 public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
@@ -110,10 +115,9 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     protected int pSpeed = 12;
     protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false,
-            gameOver = false;
+            gamePause = false, gameOver = false;
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;
-    
 
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("Super Gra -- :)...");
@@ -133,14 +137,12 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         okno.addKeyListener(okno);
         MyListener mListener = new MyListener(okno);
         okno.addMouseListener(mListener);
-        okno.addMouseMotionListener(mListener);        
+        okno.addMouseMotionListener(mListener);
     }
 
     NewProg21(String tytul) {
         super(tytul);
     }
-
-    
 
     void init() {
         Container cp = getContentPane();
@@ -153,8 +155,6 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
      * Inicjalizacja strzalu - uruchomienie watka zmieniajacego wspolrzedne
      * strzalu.
      */
-    
-    
     void shot() {
         if (ballDirection == 0) {
             if (servOne) {
@@ -196,14 +196,16 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     }
 
     void moveP2(int pDirection) {
-        if (pDirection == 1 && pTwoX < windowWidth - pWidth - 3) {
-            prevTwoX = pTwoX;
-            pTwoX += (pDirection * pSpeed);
-            isMoveTwo = true;
-        } else if (pDirection == -1 && pTwoX > 3) {
-            prevTwoX = pTwoX;
-            pTwoX += (pDirection * pSpeed);
-            isMoveTwo = true;
+        if (!gamePause) {
+            if (pDirection == 1 && pTwoX < windowWidth - pWidth - 3) {
+                prevTwoX = pTwoX;
+                pTwoX += (pDirection * pSpeed);
+                isMoveTwo = true;
+            } else if (pDirection == -1 && pTwoX > 3) {
+                prevTwoX = pTwoX;
+                pTwoX += (pDirection * pSpeed);
+                isMoveTwo = true;
+            }
         }
     }
 
@@ -282,13 +284,21 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             case KeyEvent.VK_RIGHT:
                 moveP2(1);
                 break;
-            case KeyEvent.VK_SPACE:                
+            case KeyEvent.VK_SPACE:
                 if (servTwo) {
                     shot();
                 }
                 break;
             case KeyEvent.VK_ESCAPE:
-                gameOver = true;
+                if (!gamePause) {
+                    gamePause = true;
+                    System.out.println("Pause true!");
+                     scoreWindow.isGamePaused = true;
+                } else if (gamePause) {
+                    gamePause = false;
+                    System.out.println("Pause false!");
+                    scoreWindow.isGamePaused = false;
+                }
                 break;
         }
     }

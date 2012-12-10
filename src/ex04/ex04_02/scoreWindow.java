@@ -17,13 +17,14 @@ class scoreWindow extends JFrame implements Runnable {
     public int displaySeconds = 0;
     public String preMinZero = "", preSecZero = "";
     public String displayTimer = "00:00";
-
+    public static boolean isGamePaused = false;
+    
     Timer ballTimer = new Timer(1000, new ActionListener() {
-     @Override    
-
+        
+     @Override
         public void actionPerformed(ActionEvent ae) {
 
-            countSeconds++;
+            if (!isGamePaused) {countSeconds++;}
 
             displayMinutes = countSeconds / 60;
             displaySeconds = countSeconds % 60;
