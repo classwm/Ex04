@@ -4,11 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-
 class Shot extends Thread {
 
     NewProg21 okno;
-    int ballSpeed = 0 + okno.ballRadius;
+    int ballSpeed = 0 + okno.ballDiameter;
 
     Shot(NewProg21 okno) {
         this.okno = okno;
@@ -19,30 +18,41 @@ class Shot extends Thread {
             okno.prevBallY = okno.ballY;
             okno.prevBallX = okno.ballX;
             okno.ballY += (ballSpeed * okno.ballDirection);
-            okno.ballX += okno.ballAngle * okno.ballRadius;
+            okno.ballX += okno.ballAngle * okno.ballDiameter;
             // System.out.println(okno.ballY);
-            if (okno.ballX <= 0 || okno.ballX >= okno.windowWidth) {
+            if (okno.ballX <= 0 + okno.ballDiameter || okno.ballX >= okno.windowWidth - okno.ballDiameter) {
                 okno.ballAngle = okno.ballAngle * -1;
             }
-            
+
             if (okno.ballY <= 0) {
                 okno.takenPoint = 1;
                 okno.pOneScore++;
             } else if (okno.ballY >= okno.windowHeight) {
                 okno.takenPoint = -1;
                 okno.pTwoScore++;
-            } else if (okno.ballDirection == -1 && okno.ballY == (okno.pTwoY + okno.ballRadius) && okno.ballX >= (okno.pTwoX - (okno.ballRadius / 2 )) && okno.ballX <= (okno.pTwoX + okno.pWidth + (okno.ballRadius / 2 ))) {
+            } else if (okno.ballDirection == -1 && okno.ballY == (okno.pTwoY + okno.ballDiameter) && okno.ballX >= (okno.pTwoX - (okno.ballDiameter / 2)) && okno.ballX <= (okno.pTwoX + okno.pWidth + (okno.ballDiameter / 2))) {
                 okno.ballDirection = 1;
-                if (okno.ballAngle == 0){
-                    
+                if (okno.ballAngle == 0) {
+                    if (okno.ballX > (okno.pTwoX + (okno.pWidth / 2)) + (okno.ballDiameter / 2)) {
+                        okno.ballAngle = 1;
+                    } else if (okno.ballX < (okno.pTwoX + (okno.pWidth / 2)) - (okno.ballDiameter / 2)) {
+                        okno.ballAngle = -1;
+                    }
                 }
                 Toolkit.getDefaultToolkit().beep();
-            } else if (okno.ballDirection == 1 && okno.ballY == (okno.pOneY - okno.ballRadius) && okno.ballX >= (okno.pOneX - (okno.ballRadius / 2 )) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballRadius / 2 ))) {
+            } else if (okno.ballDirection == 1 && okno.ballY == (okno.pOneY - okno.ballDiameter) && okno.ballX >= (okno.pOneX - (okno.ballDiameter / 2)) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballDiameter / 2))) {
                 okno.ballDirection = -1;
+                if (okno.ballAngle == 0) {
+                    if (okno.ballX > (okno.pOneX + (okno.pWidth / 2)) + (okno.ballDiameter / 2)) {
+                        okno.ballAngle = 1;
+                    } else if (okno.ballX < (okno.pOneX + (okno.pWidth / 2)) - (okno.ballDiameter / 2)) {
+                        okno.ballAngle = -1;
+                    }
+                }
                 Toolkit.getDefaultToolkit().beep();
             }
             try {
-                Thread.sleep(70);
+                Thread.sleep(60);
             } catch (Exception e) {
             }
         }
@@ -55,7 +65,7 @@ class Shot extends Thread {
             okno.servOne = true;
             okno.servTwo = false;
         }
-        
+
         okno.ballDirection = 0;
         okno.takenPoint = 0;
         okno.isNewServ = true;
@@ -91,18 +101,15 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
     int windowWidth = 800, windowHeight = 800;
     int pWidth = 50, pHeight = 10;
-    int windowMid = windowWidth / 2, toWindowCenter = windowMid - (pWidth / 2 );
+    int windowMid = windowWidth / 2, toWindowCenter = windowMid - (pWidth / 2);
     int pOneX = toWindowCenter, pOneY = (windowHeight - 100), pTwoX = toWindowCenter, pTwoY = (windowHeight - (windowHeight - 100));
     int pOneScore = 0, pTwoScore = 0;
     int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
-    int pSpeed = 10;
+    int pSpeed = 12;
     boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
-    static int ballX, ballY, ballRadius = 10, ballDirection = 0, ballAngle = 0;
+    static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     int takenPoint = 0;
-        
-    
 
-    
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("Super Gra -- :)...");
         okno.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -135,46 +142,54 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     void shot() {
         if (ballDirection == 0) {
             if (servOne) {
-                ballX = (pOneX + (pWidth / 2)) - (ballRadius / 2);
-                ballY = pOneY - ballRadius;
+                ballX = (pOneX + (pWidth / 2)) - (ballDiameter / 2);
+                ballY = pOneY - ballDiameter;
                 ballDirection = -1;
                 ballAngle = pOneStartAngle();
                 new Shot(this).start();
             } else if (servTwo) {
-                ballX = pTwoX + pWidth / 2 - ballRadius / 2;
-                ballY = pTwoY + ballRadius;
+                ballX = pTwoX + pWidth / 2 - ballDiameter / 2;
+                ballY = pTwoY + ballDiameter;
                 ballDirection = 1;
                 ballAngle = pTwoStartAngle();
                 new Shot(this).start();
             }
         }
     }
-    
-    
-    int pOneStartAngle() { 
-        int pOneXmid = pOneX + (pWidth / 2 );
-        if (pOneXmid > windowMid) return 1;
-        if (pOneXmid < windowMid) return -1; 
+
+    int pOneStartAngle() {
+        int pOneXmid = pOneX + (pWidth / 2);
+        if (pOneXmid > windowMid) {
+            return 1;
+        }
+        if (pOneXmid < windowMid) {
+            return -1;
+        }
         return 0;
     }
-    
-    int pTwoStartAngle() {  
-        int pTwoXmid = pTwoX + (pWidth / 2 );
-        if (pTwoXmid > windowMid) return 1;
-        if (pTwoXmid < windowMid) return -1; 
+
+    int pTwoStartAngle() {
+        int pTwoXmid = pTwoX + (pWidth / 2);
+        if (pTwoXmid > windowMid) {
+            return 1;
+        }
+        if (pTwoXmid < windowMid) {
+            return -1;
+        }
         return 0;
     }
-            
 
     void moveP2(int pDirection) {
-        if (pDirection == 1 && pTwoX < windowWidth - pWidth) {
+        if (pDirection == 1 && pTwoX < windowWidth - pWidth - 3) {
             prevTwoX = pTwoX;
             pTwoX += (pDirection * pSpeed);
             isMoveTwo = true;
-        } else if (pDirection == -1 && pTwoX > 0) {
+            System.out.println(pTwoX);
+        } else if (pDirection == -1 && pTwoX > 3) {
             prevTwoX = pTwoX;
             pTwoX += (pDirection * pSpeed);
             isMoveTwo = true;
+            System.out.println(pTwoX);
         }
     }
 
@@ -185,7 +200,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             isMoveOne = false;
         }
         if (isMoveOne && servOne) {
-            g.clearRect(prevOneX, pOneY - ballRadius, pWidth, pHeight + ballRadius);
+            g.clearRect(prevOneX, pOneY - ballDiameter, pWidth, pHeight + ballDiameter);
             isMoveOne = false;
         }
 
@@ -194,10 +209,10 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             isMoveTwo = false;
         }
         if (isMoveTwo && servTwo) {
-            g.clearRect(prevTwoX, pTwoY, pWidth, pHeight + ballRadius);
+            g.clearRect(prevTwoX, pTwoY, pWidth, pHeight + ballDiameter);
             isMoveTwo = false;
         }
-        
+
         if (isNewServ) {
             g.clearRect(0, 0, windowWidth, windowHeight);
             pOneX = toWindowCenter;
@@ -209,18 +224,18 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         g.fillRect(pOneX, pOneY, pWidth, pHeight);
 
         if (ballDirection == 0 && servOne) {
-            
-            g.fillOval(pOneX + pWidth / 2 - ballRadius / 2, pOneY - ballRadius, ballRadius, ballRadius);
+
+            g.fillOval(pOneX + pWidth / 2 - ballDiameter / 2, pOneY - ballDiameter, ballDiameter, ballDiameter);
         }
 
         if (ballDirection == 0 && servTwo) {
-            
-            g.fillOval(pTwoX + pWidth / 2 - ballRadius / 2, pTwoY + ballRadius, ballRadius, ballRadius);
+
+            g.fillOval(pTwoX + pWidth / 2 - ballDiameter / 2, pTwoY + ballDiameter, ballDiameter, ballDiameter);
         }
 
         if (ballDirection != 0) {
-            g.clearRect(prevBallX, prevBallY, ballRadius, ballRadius);
-            g.fillOval(ballX, ballY, ballRadius, ballRadius);
+            g.clearRect(prevBallX, prevBallY, ballDiameter, ballDiameter);
+            g.fillOval(ballX, ballY, ballDiameter, ballDiameter);
         }
 
 
