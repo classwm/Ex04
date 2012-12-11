@@ -52,6 +52,7 @@ class Shot extends Thread {
                 }
                 Toolkit.getDefaultToolkit().beep();
             }
+            
             try {
                 do {
                     Thread.sleep(60);
@@ -62,7 +63,6 @@ class Shot extends Thread {
                 System.out.println(ex);
             }
         }
-        System.out.println("Player1: " + okno.pOneScore + " - Player2: " + okno.pTwoScore);
         if (okno.takenPoint == 1) {
             okno.servOne = false;
             okno.servTwo = true;
@@ -114,8 +114,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     protected static int pOneScore = 0, pTwoScore = 0;
     protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     protected int pSpeed = 12;
-    protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false,
-            gamePause = false, gameOver = false;
+    protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
+    static boolean playerComputer = false, gamePause = false, gameOver = false;
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;
 
@@ -124,7 +124,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         okno.setDefaultCloseOperation(EXIT_ON_CLOSE);
         okno.init();
 
-        scoreWindow score = new scoreWindow();
+        ScoreWindow score = new ScoreWindow();
         score.initScore();
 
         JPanel pane = (JPanel) score.getContentPane();
@@ -254,7 +254,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         if (ballDirection != 0) {
             g.clearRect(prevBallX, prevBallY, ballDiameter, ballDiameter);
             g.fillOval(ballX, ballY, ballDiameter, ballDiameter);
-        }
+        }        
+
     } // paint
 
     public void run() { // metoda wątku odświeżającego ekran
@@ -293,14 +294,14 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 if (!gamePause) {
                     gamePause = true;
                     System.out.println("Pause true!");
-                     scoreWindow.isGamePaused = true;
+                    ScoreWindow.isGamePaused = true;
+                    (new PauseWindow()).pauseWindow();
                 } else if (gamePause) {
                     gamePause = false;
                     System.out.println("Pause false!");
-                    scoreWindow.isGamePaused = false;
+                    ScoreWindow.isGamePaused = false;
                 }
                 break;
         }
     }
 } //NewProg21
-

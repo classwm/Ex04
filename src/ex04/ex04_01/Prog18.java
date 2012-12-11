@@ -20,48 +20,35 @@ public class Prog18 extends JFrame {
     }
 
     void init() {
-        setSize(500, 400);
         Container cp = getContentPane();
 
         cp.setLayout(new BorderLayout()); // wybieram układacz brzegowy dla całego okna
-        
-        JTextField text1 = new JTextField(40);
-        cp.add(text1, BorderLayout.NORTH);
-        text1.setText("Tekst 1");
-        JButton b1 = new JButton("Pierwszy");
-        // cp.add(b1);
-        
-        JPanel jp = new JPanel();
-        cp.add(jp);  
-        jp.setSize(500,150);
-        jp.setLayout(new FlowLayout());                                   
-        
-        JPanel jp2 = new JPanel();
-        cp.add(jp2, BorderLayout.EAST);
-        jp.setLayout(new GridLayout(3,1));        
-        jp.add(b1);
-        
-        JPanel jp3 = new JPanel();
-        cp.add(jp3);
-        jp.setLayout(new FlowLayout());
-        
+
+        JPanel p1 = new JPanel(); // tworze Panel by na nim umiescic przyciski
+        p1.setLayout(new FlowLayout()); // dla p1 ustawiam rozkład FlowLayout
+        JButton b1 = new JButton("Graj");
+        JButton b2 = new JButton("Zatrzymaj");
+        p1.add(b1);
+        p1.add(b2); // dodałem przyciski
+        cp.add(p1, BorderLayout.SOUTH); // dodaje panel na północy głównego okna
+
+        JPanel p2 = new JPanel(); // teraz tworze nowy panel z rozkładem GridLayout
+        p2.setLayout(new GridLayout(3, 1));
         JCheckBox cb1 = new JCheckBox("1");
-        jp.add(cb1);
-        
-        
-        
         JCheckBox cb2 = new JCheckBox("2");
-        jp2.add(cb2);
-        
         JCheckBox cb3 = new JCheckBox("3");
-        jp2.add(cb3);
-        
-        JButton b2 = new JButton("Graj");
-        jp.add(b2);
-        
-        JButton b3 = new JButton("Zatrzymaj");
-        jp.add(b3);
-        
-        
+        p2.add(cb1);
+        p2.add(cb2);
+        p2.add(cb3);
+        cp.add(p2, BorderLayout.EAST); //dodaje panel na północy głównego okna
+
+        JPanel p3 = new JPanel(); //teraz tworze nowy panel z rozkładem FlowLayout
+        p3.setLayout(new FlowLayout());
+        JTextField text = new JTextField(20);
+        p3.add(text);
+        text.setText("Oto text");
+        JButton b3 = new JButton("Pierwszy");
+        p3.add(b3);
+        cp.add(p3, BorderLayout.WEST);
     }
 }
