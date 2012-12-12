@@ -67,6 +67,13 @@ class ScoreWindow extends JFrame implements Runnable {
         g.setFont(new Font("SansSerif",
                 Font.BOLD, 20));
         g.drawString(displayTimer, 134, 185);
+        if (!isGamePaused) {
+            g.setColor(Color.GRAY);
+            g.setFont(new Font("SansSerif",
+                Font.BOLD, 15));
+            g.drawString("Naciśnij ESC dla pauzy i zmiany gracza 2", 8, 210);
+        }
+           
     }
 
     public void run() { // metoda wątku odświeżającego ScoreWindow        

@@ -73,8 +73,7 @@ class Shot extends Thread {
 
             if (okno.playerComputer && okno.ballDirection == -1 && !computerStop) {
                 if (computeAI) {
-                    pongAIxy();
-                    System.out.println("Computer X: " + computerX);
+                    pongAIxy();                    
                 }
 
                 if (okno.pTwoX + (okno.pWidth / 2) > computerX) {
@@ -90,8 +89,7 @@ class Shot extends Thread {
                     computerStop = true;
                 } else if (computerX > okno.pTwoX + okno.ballDiameter && computerX < okno.pTwoX + (okno.pWidth - okno.ballDiameter)) {
                     computerStop = true;
-                }
-                System.out.println("PTwoX = " + okno.pTwoX);
+                }                
             }
 
             if (okno.playerComputer && okno.ballDirection == 1) {
@@ -257,9 +255,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 new Shot(this).start();
             } else if (servTwo && playerComputer) {
                 isNewServ = false;
-                System.out.println("Serwis CompBefore");
                 servComputer();
-                System.out.println("Serwis CompAfter");
                 ballX = pTwoX + pWidth / 2 - ballDiameter / 2;
                 ballY = pTwoY + ballDiameter;
                 ballDirection = 1;
@@ -278,7 +274,6 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         if (whereToGoX < 10) {
             whereToGoX = 10;
         }
-        System.out.println("Serwis:" + whereToGoX);
 
         if (pTwoX < whereToGoX) {
             while (pTwoX < whereToGoX) {
