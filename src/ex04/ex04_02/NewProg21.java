@@ -2,6 +2,7 @@ package ex04.ex04_02;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Random;
 import javax.swing.*;
 
 class Shot extends Thread {
@@ -106,22 +107,25 @@ class Shot extends Thread {
                     Thread.sleep(threadSleepTime);
                 } while (okno.gamePause);
             } catch (Exception ex) {
-                System.out.println("Wyjątek w Shot.run");
+                System.out.println("Wyjątek w Shot.run :)");
                 System.out.println(ex);
             }
         }
         if (okno.takenPoint == 1) {
-            okno.servOne = false;
-            okno.servTwo = true;
-        }
-        if (okno.takenPoint == -1) {
             okno.servOne = true;
             okno.servTwo = false;
+        }
+        if (okno.takenPoint == -1) {
+            okno.servOne = false;
+            okno.servTwo = true;
         }
 
         okno.ballDirection = 0;
         okno.takenPoint = 0;
         okno.isNewServ = true;
+        if (okno.playerComputer && okno.servTwo) {
+            okno.shot();
+        }
     }
 
     public void pongAIxy() {
@@ -231,12 +235,44 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 ballDirection = -1;
                 ballAngle = pOneStartAngle();
                 new Shot(this).start();
-            } else if (servTwo) {
+            } else if (servTwo && !playerComputer) {
                 ballX = pTwoX + pWidth / 2 - ballDiameter / 2;
                 ballY = pTwoY + ballDiameter;
                 ballDirection = 1;
                 ballAngle = pTwoStartAngle();
                 new Shot(this).start();
+            } else if (servTwo && playerComputer) {
+                System.out.println("Serwis CompBefore");
+                servComputer();
+                System.out.println("Serwis CompAfter");
+                ballX = pTwoX + pWidth / 2 - ballDiameter / 2;
+                ballY = pTwoY + ballDiameter;
+                ballDirection = 1;
+                ballAngle = pTwoStartAngle();
+                new Shot(this).start();
+            }
+        }
+    }
+
+    void servComputer() {
+        isNewServ = true;
+        Random r = new Random();
+        int whereToGoX;
+        
+        whereToGoX = r.nextInt(windowWidth - 5 + 1) + 5;
+        System.out.println("Serwis:" + whereToGoX);
+        
+        if (pTwoX < whereToGoX) {
+            while (pTwoX < whereToGoX) {
+                prevTwoX = pTwoX;
+                pTwoX++;
+                isMoveTwo = true;
+            }
+        } else if (pTwoX > whereToGoX) {
+            while (pTwoX > whereToGoX) {
+                prevTwoX = pTwoX;
+                pTwoX--;
+                isMoveTwo = true;
             }
         }
     }
