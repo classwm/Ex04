@@ -10,8 +10,8 @@ class Shot extends Thread {
     NewProg21 okno;
     int ballSpeed = 0 + okno.ballDiameter;
     int computerX = 0;
-    boolean computeAI = false;
-    boolean computerStop = false;
+    static boolean computeAI = false;
+    static boolean computerStop = false;
     int threadSleepTime = 60;
 
     Shot(NewProg21 okno) {
@@ -38,6 +38,7 @@ class Shot extends Thread {
                 okno.pTwoScore++;
             } else if (okno.ballDirection == -1 && okno.ballY == (okno.pTwoY + okno.ballDiameter) && okno.ballX >= (okno.pTwoX - (okno.ballDiameter / 2)) && okno.ballX <= (okno.pTwoX + okno.pWidth + (okno.ballDiameter / 2))) {
                 okno.ballDirection = 1;
+
                 if (okno.ballAngle == 0) {
                     if (okno.ballX > (okno.pTwoX + (okno.pWidth / 2)) + (okno.ballDiameter / 2)) {
                         okno.ballAngle = 1;
@@ -234,6 +235,10 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 ballY = pOneY - ballDiameter;
                 ballDirection = -1;
                 ballAngle = pOneStartAngle();
+                if (playerComputer) {
+                    Shot.computeAI = true;
+                    Shot.computerStop = false;
+                }
                 new Shot(this).start();
             } else if (servTwo && !playerComputer) {
                 ballX = pTwoX + pWidth / 2 - ballDiameter / 2;
@@ -242,6 +247,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 ballAngle = pTwoStartAngle();
                 new Shot(this).start();
             } else if (servTwo && playerComputer) {
+                isNewServ = false;
                 System.out.println("Serwis CompBefore");
                 servComputer();
                 System.out.println("Serwis CompAfter");
@@ -258,21 +264,34 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         isNewServ = true;
         Random r = new Random();
         int whereToGoX;
-        
-        whereToGoX = r.nextInt(windowWidth - 5 + 1) + 5;
+
+        whereToGoX = r.nextInt(windowWidth - (pWidth + 5));
+        if (whereToGoX < 10) {
+            whereToGoX = 10;
+        }
         System.out.println("Serwis:" + whereToGoX);
-        
+
         if (pTwoX < whereToGoX) {
             while (pTwoX < whereToGoX) {
+                try {
+                    Thread.sleep(20);
+                } catch (Exception e) {
+                }
                 prevTwoX = pTwoX;
-                pTwoX++;
+                pTwoX += 10;
                 isMoveTwo = true;
+
             }
         } else if (pTwoX > whereToGoX) {
             while (pTwoX > whereToGoX) {
+                try {
+                    Thread.sleep(20);
+                } catch (Exception e) {
+                }
                 prevTwoX = pTwoX;
-                pTwoX--;
+                pTwoX -= 10;
                 isMoveTwo = true;
+
             }
         }
     }
