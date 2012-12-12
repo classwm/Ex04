@@ -14,6 +14,9 @@ public class PauseWindow {
 
         int messageType = JOptionPane.QUESTION_MESSAGE;
         String[] options = {"Zakończ grę", "Powrót do gry", "Player 2 = Komputer"};
+        if (NewProg21.playerComputer) {
+            options[2] = "Player2 = Człowiek";
+        }
         int buttonCode = JOptionPane.showOptionDialog(myFrame,
                 "Co chcesz zrobić?","Option Dialog Box", 0, messageType, null, options, "Powrót do gry");
         System.out.println("Wciśnięto: " + buttonCode);
@@ -23,7 +26,11 @@ public class PauseWindow {
             NewProg21.gamePause = false;
             ScoreWindow.isGamePaused = false;
         } else if (buttonCode== 2) {
-            NewProg21.playerComputer = true;
+            if (!NewProg21.playerComputer) {
+                NewProg21.playerComputer = true;
+            } else if (NewProg21.playerComputer) {
+                NewProg21.playerComputer = false;
+            }            
             NewProg21.gamePause = false;            
             ScoreWindow.isGamePaused = false;
         }

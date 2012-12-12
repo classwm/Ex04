@@ -11,6 +11,7 @@ class Shot extends Thread {
     int computerX = 0;
     boolean computeAI = false;
     boolean computerStop = false;
+    int threadSleepTime = 60;
 
     Shot(NewProg21 okno) {
         this.okno = okno;
@@ -68,17 +69,16 @@ class Shot extends Thread {
 
                 if (okno.pTwoX + (okno.pWidth / 2) > computerX) {
                     okno.prevTwoX = okno.pTwoX;
-                    okno.pTwoX -= ballSpeed;
+                    okno.pTwoX -= ballSpeed / 2;
                     okno.isMoveTwo = true;
                 } else if (okno.pTwoX + (okno.pWidth / 2) < computerX) {
                     okno.prevTwoX = okno.pTwoX;
-                    okno.pTwoX += ballSpeed;
+                    okno.pTwoX += ballSpeed / 2;
                     okno.isMoveTwo = true;
                 }
                 if (okno.pTwoX <= 5 || okno.pTwoX >= okno.windowWidth - okno.pWidth - 5) {
                     computerStop = true;
-                } 
-                else if (computerX > okno.pTwoX + okno.ballDiameter && computerX < okno.pTwoX + (okno.pWidth - okno.ballDiameter)) {
+                } else if (computerX > okno.pTwoX + okno.ballDiameter && computerX < okno.pTwoX + (okno.pWidth - okno.ballDiameter)) {
                     computerStop = true;
                 }
                 System.out.println("PTwoX = " + okno.pTwoX);
@@ -97,9 +97,13 @@ class Shot extends Thread {
                 }
             }
             try {
+                if (!okno.playerComputer) {
+                    threadSleepTime = 60;
+                } else {
+                    threadSleepTime = 40;
+                }
                 do {
-                    Thread.sleep(60);
-                    // do nothing
+                    Thread.sleep(threadSleepTime);
                 } while (okno.gamePause);
             } catch (Exception ex) {
                 System.out.println("Wyjątek w Shot.run");
