@@ -23,6 +23,7 @@ public class PauseWindow {
             NewProg21.gamePause = false;
             ScoreWindow.isGamePaused = false;
         } else if (buttonCode== 2) {
+            NewProg21.playerComputer = true;
             NewProg21.gamePause = false;            
             ScoreWindow.isGamePaused = false;
         }

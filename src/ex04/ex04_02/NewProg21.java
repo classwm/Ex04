@@ -8,6 +8,9 @@ class Shot extends Thread {
 
     NewProg21 okno;
     int ballSpeed = 0 + okno.ballDiameter;
+    int computerX = 0;
+    boolean computeAI = false;
+    boolean computerStop = false;
 
     Shot(NewProg21 okno) {
         this.okno = okno;
@@ -43,6 +46,9 @@ class Shot extends Thread {
                 Toolkit.getDefaultToolkit().beep();
             } else if (okno.ballDirection == 1 && okno.ballY == (okno.pOneY - okno.ballDiameter) && okno.ballX >= (okno.pOneX - (okno.ballDiameter / 2)) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballDiameter / 2))) {
                 okno.ballDirection = -1;
+                if (okno.playerComputer) {
+                    computeAI = true;
+                }
                 if (okno.ballAngle == 0) {
                     if (okno.ballX > (okno.pOneX + (okno.pWidth / 2)) + (okno.ballDiameter / 5)) {
                         okno.ballAngle = 1;
@@ -52,9 +58,27 @@ class Shot extends Thread {
                 }
                 Toolkit.getDefaultToolkit().beep();
             }
-            if (okno.playerComputer) {
-                
+
+            if (okno.playerComputer && okno.ballDirection == -1 && !computerStop) {
+                if (computeAI) {
+                    pongAIxy();
+                    System.out.println("Computer X: " + computerX);
+                }
+
+                if (okno.pTwoX + (okno.pWidth / 2) > computerX) {
+                    okno.prevTwoX = okno.pTwoX;
+                    okno.pTwoX -= ballSpeed;
+                    okno.isMoveTwo = true;
+                } else if (okno.pTwoX + (okno.pWidth / 2) < computerX) {
+                    okno.prevTwoX = okno.pTwoX;
+                    okno.pTwoX += ballSpeed;
+                    okno.isMoveTwo = true;
+                }
+                if (okno.pTwoX + (okno.pWidth / 2) == computerX) {
+                    computerStop = true;
+                }
             }
+
             try {
                 do {
                     Thread.sleep(60);
@@ -77,6 +101,27 @@ class Shot extends Thread {
         okno.ballDirection = 0;
         okno.takenPoint = 0;
         okno.isNewServ = true;
+    }
+
+    public void pongAIxy() {
+
+        int computerY = okno.pTwoY;
+        int targetX = okno.ballX;
+        int targetY = okno.ballY;
+        int targetAngle = okno.ballAngle;
+        int targetDiameter = okno.ballDiameter;
+        int targetSpeed = ballSpeed;
+        int targetDirection = okno.ballDirection;
+
+        while (targetY != computerY) {
+            targetY += (targetSpeed * targetDirection);
+            targetX += targetAngle * targetDiameter;
+            if (targetX <= 0 + targetDiameter || targetX >= okno.windowWidth - targetDiameter) {
+                targetAngle = targetAngle * -1;
+            }
+        }
+        computerX = targetX;
+        computeAI = false;
     }
 }
 
@@ -256,7 +301,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         if (ballDirection != 0) {
             g.clearRect(prevBallX, prevBallY, ballDiameter, ballDiameter);
             g.fillOval(ballX, ballY, ballDiameter, ballDiameter);
-        }        
+        }
 
     } // paint
 
@@ -282,13 +327,17 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     public void keyPressed(KeyEvent e) { // reaguje jedynie na przycisniecie klawisza
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
+                if (!playerComputer) {
                 moveP2(-1);
+                }
                 break;
             case KeyEvent.VK_RIGHT:
+                if (!playerComputer) {
                 moveP2(1);
+                }
                 break;
             case KeyEvent.VK_SPACE:
-                if (servTwo) {
+                if (! playerComputer && servTwo) {
                     shot();
                 }
                 break;
