@@ -48,6 +48,7 @@ class Shot extends Thread {
                 okno.ballDirection = -1;
                 if (okno.playerComputer) {
                     computeAI = true;
+                    computerStop = false;
                 }
                 if (okno.ballAngle == 0) {
                     if (okno.ballX > (okno.pOneX + (okno.pWidth / 2)) + (okno.ballDiameter / 5)) {
@@ -74,11 +75,27 @@ class Shot extends Thread {
                     okno.pTwoX += ballSpeed;
                     okno.isMoveTwo = true;
                 }
-                if (okno.pTwoX + (okno.pWidth / 2) == computerX) {
+                if (okno.pTwoX <= 5 || okno.pTwoX >= okno.windowWidth - okno.pWidth - 5) {
+                    computerStop = true;
+                } 
+                else if (computerX > okno.pTwoX + okno.ballDiameter && computerX < okno.pTwoX + (okno.pWidth - okno.ballDiameter)) {
                     computerStop = true;
                 }
+                System.out.println("PTwoX = " + okno.pTwoX);
             }
 
+            if (okno.playerComputer && okno.ballDirection == 1) {
+
+                if (okno.pTwoX + (okno.pWidth / 2) > okno.windowWidth / 2) {
+                    okno.prevTwoX = okno.pTwoX;
+                    okno.pTwoX -= ballSpeed / 2;
+                    okno.isMoveTwo = true;
+                } else if (okno.pTwoX + (okno.pWidth / 2) < okno.windowWidth / 2) {
+                    okno.prevTwoX = okno.pTwoX;
+                    okno.pTwoX += ballSpeed / 2;
+                    okno.isMoveTwo = true;
+                }
+            }
             try {
                 do {
                     Thread.sleep(60);
@@ -328,16 +345,16 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 if (!playerComputer) {
-                moveP2(-1);
+                    moveP2(-1);
                 }
                 break;
             case KeyEvent.VK_RIGHT:
                 if (!playerComputer) {
-                moveP2(1);
+                    moveP2(1);
                 }
                 break;
             case KeyEvent.VK_SPACE:
-                if (! playerComputer && servTwo) {
+                if (!playerComputer && servTwo) {
                     shot();
                 }
                 break;
