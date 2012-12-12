@@ -52,7 +52,9 @@ class Shot extends Thread {
                 }
                 Toolkit.getDefaultToolkit().beep();
             }
-            
+            if (okno.playerComputer) {
+                
+            }
             try {
                 do {
                     Thread.sleep(60);

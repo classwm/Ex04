@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-class scoreWindow extends JFrame implements Runnable {
+class ScoreWindow extends JFrame implements Runnable {
 
     int scoreWidth = 300, scoreHeight = 200;
     int scorePositionX = NewProg21.windowWidth + 100, scorePositionY = 200;
@@ -60,7 +60,7 @@ class scoreWindow extends JFrame implements Runnable {
         g.drawString(displayTimer, 134, 185);
     }
 
-    public void run() { // metoda wątku odświeżającego scoreWindow        
+    public void run() { // metoda wątku odświeżającego ScoreWindow        
         while (true) {
             repaint();
             try {
