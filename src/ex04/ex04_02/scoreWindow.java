@@ -10,8 +10,9 @@ import javax.swing.Timer;
 
 class ScoreWindow extends JFrame implements Runnable {
 
-    int scoreWidth = 300, scoreHeight = 200;
+    int scoreWidth = 300, scoreHeight = 220;
     int scorePositionX = NewProg21.windowWidth + 100, scorePositionY = 200;
+    int pOneScoreX = 50, pTwoScoreX = 220;
     public int countSeconds = 0;
     public int displayMinutes = 0;
     public int displaySeconds = 0;
@@ -19,12 +20,18 @@ class ScoreWindow extends JFrame implements Runnable {
     public String displayTimer = "00:00";
     public static boolean isGamePaused = false;
     
+    
     Timer ballTimer = new Timer(1000, new ActionListener() {
         
      @Override
         public void actionPerformed(ActionEvent ae) {
 
-            if (!isGamePaused) {countSeconds++;}
+            if (!isGamePaused) {
+                countSeconds++;
+                if (countSeconds == 6000) {
+                    countSeconds = 1;
+                }
+            }
 
             displayMinutes = countSeconds / 60;
             displaySeconds = countSeconds % 60;
@@ -49,12 +56,14 @@ class ScoreWindow extends JFrame implements Runnable {
         g.setColor(Color.BLACK);
         g.setFont(new Font("SansSerif",
                 Font.BOLD, 20));
-        g.drawString("PLAYER 1:", 15, 60);
-        g.drawString("PLAYER 2:", 180, 60);
+        g.drawString(NewProg21.pOneName, 20, 60);
+        g.drawString(NewProg21.pTwoName, 185, 60);
         g.setFont(new Font("SansSerif",
                 Font.BOLD, 100));
-        g.drawString(Integer.toString(NewProg21.pOneScore), 50, 150);
-        g.drawString(Integer.toString(NewProg21.pTwoScore), 220, 150);
+        if (NewProg21.pOneScore > 9) pOneScoreX = 10;
+        if (NewProg21.pTwoScore > 9) pTwoScoreX = 180;
+        g.drawString(Integer.toString(NewProg21.pOneScore), pOneScoreX, 150);
+        g.drawString(Integer.toString(NewProg21.pTwoScore), pTwoScoreX, 150);
         g.setFont(new Font("SansSerif",
                 Font.BOLD, 20));
         g.drawString(displayTimer, 134, 185);

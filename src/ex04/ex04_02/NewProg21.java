@@ -33,9 +33,17 @@ class Shot extends Thread {
             if (okno.ballY <= 0) {
                 okno.takenPoint = 1;
                 okno.pOneScore++;
+                if (okno.pOneScore == 100) {
+                    okno.pOneScore = 0;
+                    okno.pTwoScore = 0;
+                }
             } else if (okno.ballY >= okno.windowHeight) {
                 okno.takenPoint = -1;
                 okno.pTwoScore++;
+                if (okno.pTwoScore == 100) {
+                    okno.pTwoScore = 0;
+                    okno.pOneScore = 0;
+                }
             } else if (okno.ballDirection == -1 && okno.ballY == (okno.pTwoY + okno.ballDiameter) && okno.ballX >= (okno.pTwoX - (okno.ballDiameter / 2)) && okno.ballX <= (okno.pTwoX + okno.pWidth + (okno.ballDiameter / 2))) {
                 okno.ballDirection = 1;
 
@@ -191,6 +199,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     static boolean playerComputer = false, gamePause = false, gameOver = false;
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;
+    static String pOneName = "Player 1", pTwoName = "Player 2";
 
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("Super Gra -- :)...");
@@ -280,7 +289,6 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 prevTwoX = pTwoX;
                 pTwoX += 10;
                 isMoveTwo = true;
-
             }
         } else if (pTwoX > whereToGoX) {
             while (pTwoX > whereToGoX) {
@@ -291,7 +299,6 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 prevTwoX = pTwoX;
                 pTwoX -= 10;
                 isMoveTwo = true;
-
             }
         }
     }

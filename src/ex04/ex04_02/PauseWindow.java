@@ -28,8 +28,10 @@ public class PauseWindow {
         } else if (buttonCode== 2) {
             if (!NewProg21.playerComputer) {
                 NewProg21.playerComputer = true;
+                NewProg21.pTwoName = "Komputer";
             } else if (NewProg21.playerComputer) {
                 NewProg21.playerComputer = false;
+                NewProg21.pTwoName = "Player 2";
             }            
             NewProg21.gamePause = false;            
             ScoreWindow.isGamePaused = false;
