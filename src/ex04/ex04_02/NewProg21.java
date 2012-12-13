@@ -200,7 +200,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     static String pOneName = "Player 1", pTwoName = "Player 2";
 
     public static void main(String[] args) {
-        NewProg21 okno = new NewProg21("Super Gra -- :)...");
+        NewProg21 okno = new NewProg21("SwingPong -- Super Gra -- :)...");
         okno.setDefaultCloseOperation(EXIT_ON_CLOSE);
         okno.init();
 
@@ -279,7 +279,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             while (pTwoX < whereToGoX) {
                 try {
                     Thread.sleep(20);
-                } catch (Exception e) {
+                } catch (Exception ex) {
+                    System.out.println(ex);
                 }
                 prevTwoX = pTwoX;
                 pTwoX += 10;
@@ -289,7 +290,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             while (pTwoX > whereToGoX) {
                 try {
                     Thread.sleep(20);
-                } catch (Exception e) {
+                } catch (Exception ex) {
+                    System.out.println(ex);
                 }
                 prevTwoX = pTwoX;
                 pTwoX -= 10;
@@ -388,7 +390,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             repaint();
             try {
                 Thread.sleep(1);
-            } catch (Exception e) {
+            } catch (Exception ex) {
+                System.out.println(ex);
             }
         }
     }
