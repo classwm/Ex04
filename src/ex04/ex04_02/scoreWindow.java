@@ -94,7 +94,6 @@ class ScoreWindow extends JFrame implements Runnable {
                 goingDown = false;
             }
         }
-
     }
 
     public void run() { // metoda wątku odświeżającego ScoreWindow        

@@ -198,6 +198,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;
     static String pOneName = "Player 1", pTwoName = "Player 2";
+    int spTextX = -50;
 
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("SwingPong -- Super Gra -- :)...");
@@ -381,8 +382,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         if (ballDirection != 0) {
             g.clearRect(prevBallX, prevBallY, ballDiameter, ballDiameter);
             g.fillOval(ballX, ballY, ballDiameter, ballDiameter);
-        }
-
+        }       
+        
     } // paint
 
     public void run() { // metoda wątku odświeżającego ekran
