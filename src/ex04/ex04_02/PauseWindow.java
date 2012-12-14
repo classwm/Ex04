@@ -13,9 +13,12 @@ public class PauseWindow {
     protected void pauseWindow() {
 
         int messageType = JOptionPane.QUESTION_MESSAGE;
-        String[] options = {"Zakończ grę", "Powrót do gry", "Player 2 = Komputer"};
+        String[] options = {"Zakończ grę", "Powrót do gry", "Player 2 = Komputer", "Wyłącz dźwięk"};
         if (NewProg21.playerComputer) {
             options[2] = "Player2 = Człowiek";
+        }
+        if (!NewProg21.isSound) {
+            options[3] = "Włącz dźwięk";
         }
         int buttonCode = JOptionPane.showOptionDialog(myFrame,
                 "Co chcesz zrobić?", "Opcje SwingPonga", 0, messageType, null, options, "Powrót do gry");
@@ -34,6 +37,16 @@ public class PauseWindow {
             }
             NewProg21.gamePause = false;
             ScoreWindow.isGamePaused = false;
+        } else if (buttonCode == 3) {
+            if (NewProg21.isSound) {
+                NewProg21.isSound = false;
+                NewProg21.gamePause = false;
+                ScoreWindow.isGamePaused = false;
+            } else {
+                NewProg21.isSound = true;
+                NewProg21.gamePause = false;
+                ScoreWindow.isGamePaused = false;
+            }
         }
     }
 }

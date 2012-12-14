@@ -54,7 +54,7 @@ class Shot extends Thread {
                         okno.ballAngle = -1;
                     }
                 }
-                Toolkit.getDefaultToolkit().beep();
+                if (okno.isSound) {Toolkit.getDefaultToolkit().beep();}
             } else if (okno.ballDirection == 1 && okno.ballY == (okno.pOneY - okno.ballDiameter) && okno.ballX >= (okno.pOneX - (okno.ballDiameter / 2)) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballDiameter / 2))) {
                 okno.ballDirection = -1;
                 if (okno.playerComputer) {
@@ -68,7 +68,7 @@ class Shot extends Thread {
                         okno.ballAngle = -1;
                     }
                 }
-                Toolkit.getDefaultToolkit().beep();
+                if (okno.isSound) {Toolkit.getDefaultToolkit().beep();}
             }
 
             if (okno.playerComputer && okno.ballDirection == -1 && !computerStop) {
@@ -194,7 +194,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     protected int pSpeed = 12;
     protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
-    static boolean playerComputer = false, gamePause = false, isStart = false;
+    static boolean playerComputer = false, gamePause = false, isStart = false, isSound = true;
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;
     static String pOneName = "Player 1", pTwoName = "Player 2";

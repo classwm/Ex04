@@ -33,7 +33,7 @@ public class StartWindow extends JFrame implements ActionListener {
         frame = new JFrame("SwingPong - opcje startowe");
         frame.setResizable(false);
         frame.pack();
-        frame.setLocation(500, 250);        
+        frame.setLocation(500, 250);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setAlwaysOnTop(true);
         setBackground(Color.YELLOW);
@@ -141,9 +141,15 @@ public class StartWindow extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == bStart) {
+//            ButtonModel b = myGroup1.getSelection();
+//            String t = "Not selected";
+//            if (b != null) {
+//                t = b.getActionCommand();
+//            }
+//            myLabel.setText(t);
+
             NewProg21.isStart = true;
-            frame.setVisible(false);
-            System.out.println("STARRRRRT!!!");
+            frame.setVisible(false);            
         }
     }
 }
