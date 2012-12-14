@@ -23,8 +23,8 @@ class Shot extends Thread {
         while (okno.takenPoint == 0) {
             okno.prevBallY = okno.ballY;
             okno.prevBallX = okno.ballX;
-            okno.ballY += (ballSpeed * okno.ballDirection);
-            okno.ballX += okno.ballAngle * okno.ballDiameter;
+            okno.ballY += ballSpeed * okno.ballDirection;
+            okno.ballX += ballSpeed * okno.ballAngle;
 
             if (okno.ballX <= 0 + okno.ballDiameter || okno.ballX >= okno.windowWidth - okno.ballDiameter) {
                 okno.ballAngle = okno.ballAngle * -1;
@@ -73,7 +73,7 @@ class Shot extends Thread {
 
             if (okno.playerComputer && okno.ballDirection == -1 && !computerStop) {
                 if (computeAI) {
-                    pongAIxy();                    
+                    pongAIxy();
                 }
 
                 if (okno.pTwoX + (okno.pWidth / 2) > computerX) {
@@ -89,7 +89,7 @@ class Shot extends Thread {
                     computerStop = true;
                 } else if (computerX > okno.pTwoX + okno.ballDiameter && computerX < okno.pTwoX + (okno.pWidth - okno.ballDiameter)) {
                     computerStop = true;
-                }                
+                }
             }
 
             if (okno.playerComputer && okno.ballDirection == 1) {
@@ -194,16 +194,27 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     protected int pSpeed = 12;
     protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
-    static boolean playerComputer = false, gamePause = false, gameOver = false;
+    static boolean playerComputer = false, gamePause = false, isStart = false;
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;
     static String pOneName = "Player 1", pTwoName = "Player 2";
-    int spTextX = -50;
+    
 
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("SwingPong -- Super Gra -- :)...");
         okno.setDefaultCloseOperation(EXIT_ON_CLOSE);
         okno.init();
+
+        StartWindow start = new StartWindow();
+        start.startWindow();
+        
+        while (!isStart) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+        }
 
         ScoreWindow score = new ScoreWindow();
         score.initScore();
@@ -382,8 +393,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         if (ballDirection != 0) {
             g.clearRect(prevBallX, prevBallY, ballDiameter, ballDiameter);
             g.fillOval(ballX, ballY, ballDiameter, ballDiameter);
-        }       
-        
+        }
+
     } // paint
 
     public void run() { // metoda wątku odświeżającego ekran

@@ -8,29 +8,35 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class StartWindow implements ActionListener {
+public class StartWindow extends JFrame implements ActionListener {
 
     JFrame frame;
-    
     ButtonGroup myGroup1 = null;
     ButtonGroup myGroup2 = null;
     JLabel myLabel = null;
     JLabel myLabel1 = null;
     JLabel myLabel2 = null;
-    
+    JRadioButton Player2;
+    JButton bStart;
+    JButton bInfo;
     JPanel panel2;
-    
     JButton bPlayerOneName;
     JButton bPlayerTwoName;
 
     public static void main(String[] a) {
         StartWindow myTest = new StartWindow();
-        myTest.createFrame();
+        myTest.startWindow();
 
     }
 
-    public void createFrame() {
+    public void startWindow() {
         frame = new JFrame("SwingPong - opcje startowe");
+        frame.setResizable(false);
+        frame.pack();
+        frame.setLocation(500, 250);        
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setAlwaysOnTop(true);
+        setBackground(Color.YELLOW);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container c = frame.getContentPane();
@@ -66,7 +72,7 @@ public class StartWindow implements ActionListener {
         panel.setLayout(new FlowLayout());
 
         myGroup2 = new ButtonGroup();
-        JRadioButton Player2 = new JRadioButton(NewProg21.pTwoName);
+        Player2 = new JRadioButton(NewProg21.pTwoName);
         myGroup2.add(Player2);
         panel.add(Player2);
 
@@ -79,22 +85,24 @@ public class StartWindow implements ActionListener {
         c.add(panel, BorderLayout.WEST);
 
 
-        JPanel p1 = new JPanel(); 
-        p1.setLayout(new FlowLayout()); 
-        JButton b1 = new JButton("START GRY");
-        JButton b2 = new JButton("Informacje");
-        p1.add(b1);
-        p1.add(b2); 
+        JPanel p1 = new JPanel();
+        p1.setLayout(new FlowLayout());
+        bStart = new JButton("START GRY");
+        bStart.addActionListener(this);
+        bInfo = new JButton("Informacje");
+        bInfo.addActionListener(this);
+        p1.add(bStart);
+        p1.add(bInfo);
         c.add(p1, BorderLayout.SOUTH);
 
-        panel2 = new JPanel(); 
-        p1.setLayout(new FlowLayout()); 
+        panel2 = new JPanel();
+        p1.setLayout(new FlowLayout());
         bPlayerOneName = new JButton("Imię gracza 1 - " + NewProg21.pOneName);
         bPlayerOneName.addActionListener(this);
         bPlayerTwoName = new JButton("Imię gracza 2 - " + NewProg21.pTwoName);
         bPlayerTwoName.addActionListener(this);
         p1.add(bPlayerOneName);
-        p1.add(bPlayerTwoName); 
+        p1.add(bPlayerTwoName);
         c.add(panel2);
 
         frame.pack();
@@ -115,9 +123,8 @@ public class StartWindow implements ActionListener {
                     "Podaj imię gracza nr 1:",
                     "SwingPong - imię gracza 1",
                     JOptionPane.QUESTION_MESSAGE);
-            System.out.println("Answer: " + playerOneName);
             if (playerOneName != null) {
-                NewProg21.pOneName = playerOneName;                
+                NewProg21.pOneName = playerOneName;
                 bPlayerOneName.setText("Imię gracza 1 - " + NewProg21.pOneName);
             }
         }
@@ -126,11 +133,17 @@ public class StartWindow implements ActionListener {
                     "Podaj imię gracza nr 2:",
                     "SwingPong - imię gracza 2",
                     JOptionPane.QUESTION_MESSAGE);
-            System.out.println("Answer: " + playerTwoName);
             if (playerTwoName != null) {
-                NewProg21.pTwoName = playerTwoName;                
+                NewProg21.pTwoName = playerTwoName;
                 bPlayerTwoName.setText("Imię gracza 2 - " + NewProg21.pTwoName);
+                Player2.setText(NewProg21.pTwoName);
             }
+        }
+
+        if (e.getSource() == bStart) {
+            NewProg21.isStart = true;
+            frame.setVisible(false);
+            System.out.println("STARRRRRT!!!");
         }
     }
 }
