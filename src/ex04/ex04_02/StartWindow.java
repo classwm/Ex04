@@ -13,15 +13,13 @@ public class StartWindow extends JFrame implements ActionListener {
     JFrame frame;
     ButtonGroup myGroup1;
     ButtonGroup myGroup2;
-    
     JLabel myLabel;
     JLabel myLabel1;
     JLabel myLabel2;
-    
     JRadioButton rbMaszyna;
     JRadioButton rbNormal;
-    
-    JRadioButton Player2;
+    JRadioButton rbPlayer2;
+    JRadioButton rbKomputer;
     JButton bStart;
     JButton bInfo;
     JCheckBox cbSound;
@@ -49,7 +47,7 @@ public class StartWindow extends JFrame implements ActionListener {
         c.setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());        
+        panel.setLayout(new FlowLayout());
 
         c.add(panel, BorderLayout.EAST);
 
@@ -59,36 +57,41 @@ public class StartWindow extends JFrame implements ActionListener {
         panel.setLayout(new FlowLayout());
 
         myGroup2 = new ButtonGroup();
-        Player2 = new JRadioButton(NewProg21.pTwoName);
-        myGroup2.add(Player2);
-        panel.add(Player2);
+        rbPlayer2 = new JRadioButton(NewProg21.pTwoName);
+        myGroup2.add(rbPlayer2);
+        rbPlayer2.setActionCommand("Player2");
+        panel.add(rbPlayer2);
 
-        JRadioButton Komputer = new JRadioButton("Komputer      ");
-        myGroup2.add(Komputer);
-        panel.add(Komputer);
+        rbKomputer = new JRadioButton("Komputer      ");
+        myGroup2.add(rbKomputer);
+        rbKomputer.setActionCommand("Komputer");
+        panel.add(rbKomputer);
 
-        Player2.setSelected(true);
+        rbPlayer2.setSelected(true);
 
         c.add(panel, BorderLayout.WEST);
-        
+
         myLabel1 = new JLabel("POZIOM KOMPUTERA:", SwingConstants.CENTER);
         myGroup1 = new ButtonGroup();
-        panel.add(myLabel1);       
+        panel.add(myLabel1);
 
         rbNormal = new JRadioButton("Normalny");
         myGroup1.add(rbNormal);
+        rbNormal.setActionCommand("Normalny");
         panel.add(rbNormal);
 
         rbNormal.setSelected(true);
 
         rbMaszyna = new JRadioButton("Maszyna      ");
         myGroup1.add(rbMaszyna);
+        rbMaszyna.setActionCommand("Maszyna");
         panel.add(rbMaszyna);
 
         cbSound = new JCheckBox("Dźwięk");
         cbSound.setSelected(true);
+        cbSound.addActionListener(this);
         panel.add(cbSound);
-        
+
         JPanel panel3 = new JPanel();
         panel3.setLayout(new FlowLayout());
         bStart = new JButton("START GRY");
@@ -96,7 +99,7 @@ public class StartWindow extends JFrame implements ActionListener {
         frame.getRootPane().setDefaultButton(bStart);
         bInfo = new JButton("Informacje");
         bInfo.addActionListener(this);
-        
+
         panel3.add(bStart);
         panel3.add(bInfo);
         c.add(panel3, BorderLayout.SOUTH);
@@ -116,9 +119,9 @@ public class StartWindow extends JFrame implements ActionListener {
 
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent ev) {
 
-        if (e.getSource() == bPlayerOneName) {
+        if (ev.getSource() == bPlayerOneName) {
             String playerOneName = JOptionPane.showInputDialog(null,
                     "Podaj imię gracza nr 1:",
                     "SwingPong - imię gracza 1",
@@ -128,7 +131,7 @@ public class StartWindow extends JFrame implements ActionListener {
                 bPlayerOneName.setText("Imię gracza 1 - " + NewProg21.pOneName);
             }
         }
-        if (e.getSource() == bPlayerTwoName) {
+        if (ev.getSource() == bPlayerTwoName) {
             String playerTwoName = JOptionPane.showInputDialog(null,
                     "Podaj imię gracza nr 2:",
                     "SwingPong - imię gracza 2",
@@ -136,18 +139,34 @@ public class StartWindow extends JFrame implements ActionListener {
             if (playerTwoName != null) {
                 NewProg21.pTwoName = playerTwoName;
                 bPlayerTwoName.setText("Imię gracza 2 - " + NewProg21.pTwoName);
-                Player2.setText(NewProg21.pTwoName);
+                rbPlayer2.setText(NewProg21.pTwoName);
             }
         }
+        if (ev.getSource() == bInfo) {
+        }
 
-        if (e.getSource() == bStart) {
-//            ButtonModel b = myGroup1.getSelection();
-//            String t = "Not selected";
-//            if (b != null) {
-//                t = b.getActionCommand();
-//            }
-//            myLabel.setText(t);
-
+        if (ev.getSource() == bStart) {
+            ButtonModel b2 = myGroup2.getSelection();
+            String t2 = "Not selected";
+            if (b2 != null) {
+                t2 = b2.getActionCommand();
+            }
+            ButtonModel b1 = myGroup1.getSelection();
+            String t1 = "Not selected";
+            if (b1 != null) {
+                t1 = b1.getActionCommand();
+            }
+            System.out.println(t2);
+            System.out.println(t1);
+            if (t1.equals("Maszyna")) {
+                NewProg21.cSpeedFactor = 1;
+            }
+            if (t2.equals("Komputer")) {
+                NewProg21.playerComputer = true;
+            }
+            if (!cbSound.isSelected()) {
+                NewProg21.isSound = false;
+            }
             NewProg21.isStart = true;
             frame.setVisible(false);
         }

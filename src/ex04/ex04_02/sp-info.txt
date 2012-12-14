@@ -1,0 +1,19 @@
+SwingPong v.0.1
+
+Prosta gra oparta na motywie klasycznej gry Pong.
+
+Gracz nr 1 - na dole ekranu, sterowanie paletką za pomocą myszki.
+
+Gracz nr 2 - na górze ekranu, sterowanie za pomocą klawiszy strzałek oraz spacji.
+
+Gracz nr 2 może być sterowany przez komputer lub przez człowieka, zmiana może następować podczas gry.
+
+Po uruchomieniu programu można wybrać opcje działania gry (gracz nr 2 sterowany przez człowieka lub komputer, poziom sprawności sterowania przez komputer, włączenie/wyłączenie dźwięków w grze, zmiana imion graczy); klawisz START GRY uruchamia program z wybranymi opcjami.
+
+Podczas gry można za pomocą klawisza ESC zatrzymać rozgrywkę i z menu widocznego na ekranie wyjść z programu, zmienić sterowanie graczem nr 2 (komputer lub człowiek) oraz wyłączyć lub włączyć dźwięk w grze; w czasie przerwy nie jest liczony czas gry.
+
+Po osiągnięciu przez jednego z graczy 100 punktów wynik obu graczy jest resetowany.
+
+Po upływie 100 minut resetowany jest licznik czasu gry.
+
+Piłka odbija się zawsze pod kątem 45 stopni, nie licząc momentu startu rozgrywki, kiedy uderzenie centralną częścią "paletki" odbija piłkę na wprost.

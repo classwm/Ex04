@@ -78,11 +78,11 @@ class Shot extends Thread {
 
                 if (okno.pTwoX + (okno.pWidth / 2) > computerX) {
                     okno.prevTwoX = okno.pTwoX;
-                    okno.pTwoX -= ballSpeed / 2;
+                    okno.pTwoX -= ballSpeed / okno.cSpeedFactor;
                     okno.isMoveTwo = true;
                 } else if (okno.pTwoX + (okno.pWidth / 2) < computerX) {
                     okno.prevTwoX = okno.pTwoX;
-                    okno.pTwoX += ballSpeed / 2;
+                    okno.pTwoX += ballSpeed / okno.cSpeedFactor;
                     okno.isMoveTwo = true;
                 }
                 if (okno.pTwoX <= 5 || okno.pTwoX >= okno.windowWidth - okno.pWidth - 5) {
@@ -193,7 +193,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
     protected static int pOneScore = 0, pTwoScore = 0;
     protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
     protected int pSpeed = 12;
-    protected boolean isMoveOne = false, isMoveTwo = false, servOne = false, servTwo = true, isNewServ = false;
+    static int cSpeedFactor = 2;
+    protected boolean isMoveOne = false, isMoveTwo = false, servOne = true, servTwo = false, isNewServ = false;
     static boolean playerComputer = false, gamePause = false, isStart = false, isSound = true;
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;

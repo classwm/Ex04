@@ -24,7 +24,7 @@ class ScoreWindow extends JFrame implements Runnable {
     boolean goingDown = false;
     Timer ballTimer = new Timer(1000, new ActionListener() {
         @Override
-        public void actionPerformed(ActionEvent ae) {
+        public void actionPerformed(ActionEvent ev) {
 
             if (!isGamePaused) {
                 countSeconds++;
