@@ -1,11 +1,12 @@
 package ex04.ex04_02;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.*;
 
 public class StartWindow extends JFrame implements ActionListener {
@@ -33,6 +34,10 @@ public class StartWindow extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Okno startowe z ustawianiem opcji gry
+     *
+     */
     public void startWindow() {
         frame = new JFrame("SwingPong - opcje startowe");
         frame.setResizable(false);
@@ -67,7 +72,7 @@ public class StartWindow extends JFrame implements ActionListener {
         rbKomputer.setActionCommand("Komputer");
         panel.add(rbKomputer);
 
-        rbPlayer2.setSelected(true);
+        rbKomputer.setSelected(true);
 
         c.add(panel, BorderLayout.WEST);
 
@@ -119,9 +124,15 @@ public class StartWindow extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Obsługa zdarzeń okienka startowego
+     *
+     * @param ev
+     */
+    @Override
     public void actionPerformed(ActionEvent ev) {
 
-        if (ev.getSource() == bPlayerOneName) {
+        if (ev.getSource() == bPlayerOneName) { // zmiana imienia gracza 1
             String playerOneName = JOptionPane.showInputDialog(null,
                     "Podaj imię gracza nr 1:",
                     "SwingPong - imię gracza 1",
@@ -131,7 +142,7 @@ public class StartWindow extends JFrame implements ActionListener {
                 bPlayerOneName.setText("Imię gracza 1 - " + NewProg21.pOneName);
             }
         }
-        if (ev.getSource() == bPlayerTwoName) {
+        if (ev.getSource() == bPlayerTwoName) { // zmiana imienia gracza 2
             String playerTwoName = JOptionPane.showInputDialog(null,
                     "Podaj imię gracza nr 2:",
                     "SwingPong - imię gracza 2",
@@ -142,22 +153,39 @@ public class StartWindow extends JFrame implements ActionListener {
                 rbPlayer2.setText(NewProg21.pTwoName);
             }
         }
-        if (ev.getSource() == bInfo) {
+        if (ev.getSource() == bInfo) { // wczytanie i wyświetlenie pliku z opisem
+            String f = System.getProperty("user.dir") + "/src/ex04/ex04_02/sp-info.txt";            
+            File file = new File(f);
+            JTextArea text = new JTextArea(30, 70);
+            text.setLineWrap(true);  
+            JScrollPane jsp = new JScrollPane(text, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            try {
+                BufferedReader in = new BufferedReader(new FileReader(file));
+                String s = new String();
+                while ((s = in.readLine()) != null) {
+                    text.append(s + "\n\r");
+                }
+                text.setEditable(false);
+                jsp.getViewport().add(text);
+                JOptionPane.showMessageDialog(bInfo, jsp);
+            } catch (FileNotFoundException ex) {
+                System.out.println("Brak pliku.");
+            } catch (IOException ex) {
+                System.out.println("Błąd wejścia-wyjścia.");
+            }
         }
 
-        if (ev.getSource() == bStart) {
+        if (ev.getSource() == bStart) { // start gry, poprzedzony sprawdzeniem ustawień opcji 
             ButtonModel b2 = myGroup2.getSelection();
             String t2 = "Not selected";
             if (b2 != null) {
                 t2 = b2.getActionCommand();
             }
             ButtonModel b1 = myGroup1.getSelection();
-            String t1 = "Not selected";
+            String t1 = "Brak wyboru";
             if (b1 != null) {
                 t1 = b1.getActionCommand();
-            }
-            System.out.println(t2);
-            System.out.println(t1);
+            }            
             if (t1.equals("Maszyna")) {
                 NewProg21.cSpeedFactor = 1;
             }

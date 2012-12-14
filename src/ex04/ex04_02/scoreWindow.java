@@ -22,6 +22,11 @@ class ScoreWindow extends JFrame implements Runnable {
     public String displayTimer = "00:00";
     public static boolean isGamePaused = false;
     boolean goingDown = false;
+    
+    /**
+     * Metoda uzywająca Timera do zliczania sekund i wyświetlanai ich w formacie
+     * mm:ss
+     */
     Timer ballTimer = new Timer(1000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ev) {
@@ -50,8 +55,13 @@ class ScoreWindow extends JFrame implements Runnable {
         }
     }); // ballTimer
 
+    /**
+     * Metoda rysująca okienko z wynikiem
+     *
+     * @param g
+     */
     public void paint(Graphics g) {
-        
+
         if (!isGamePaused) {
             g.clearRect(0, 0, scoreWidth, scoreHeight);
 
@@ -96,7 +106,11 @@ class ScoreWindow extends JFrame implements Runnable {
         }
     }
 
-    public void run() { // metoda wątku odświeżającego ScoreWindow        
+    /**
+     * Watek ovbsługujący okienko z wynikiem
+     */
+    @Override
+    public void run() {
         while (true) {
             repaint();
             try {
@@ -109,7 +123,7 @@ class ScoreWindow extends JFrame implements Runnable {
             } catch (Exception ex) {
                 System.out.println(ex);
             }
-        } // 
+        }
     } // score run
 
     void initScore() {

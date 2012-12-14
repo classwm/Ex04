@@ -8,16 +8,19 @@ import javax.swing.*;
 class Shot extends Thread {
 
     NewProg21 okno;
-    int ballSpeed = 0 + okno.ballDiameter;
-    int computerX = 0;
-    static boolean computeAI = false;
-    static boolean computerStop = false;
+    int ballSpeed = 0 + okno.ballDiameter; // szybkość ruchu piłki
+    int computerX = 0; // współrzędna X, na ktrórej ma się zatrzymać gracz strwo. przez komputer
+    static boolean computeAI = false; // flaga  czy obliczać ruch piłki
+    static boolean computerStop = false; // flaga czy zatrzymać ruch gracza sterow. przez komputer
     int threadSleepTime = 60;
 
     Shot(NewProg21 okno) {
         this.okno = okno;
     }
-
+    
+/**
+ * Wątek obsługi zmiany pozycji piłki, sprawdzenie kolizji, zmiana pozycji gracza sterowanego przez komputer
+ */
     public void run() {
 
         while (okno.takenPoint == 0) {
@@ -54,7 +57,9 @@ class Shot extends Thread {
                         okno.ballAngle = -1;
                     }
                 }
-                if (okno.isSound) {Toolkit.getDefaultToolkit().beep();}
+                if (okno.isSound) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
             } else if (okno.ballDirection == 1 && okno.ballY == (okno.pOneY - okno.ballDiameter) && okno.ballX >= (okno.pOneX - (okno.ballDiameter / 2)) && okno.ballX <= (okno.pOneX + okno.pWidth + (okno.ballDiameter / 2))) {
                 okno.ballDirection = -1;
                 if (okno.playerComputer) {
@@ -68,7 +73,9 @@ class Shot extends Thread {
                         okno.ballAngle = -1;
                     }
                 }
-                if (okno.isSound) {Toolkit.getDefaultToolkit().beep();}
+                if (okno.isSound) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
             }
 
             if (okno.playerComputer && okno.ballDirection == -1 && !computerStop) {
@@ -105,13 +112,13 @@ class Shot extends Thread {
                 }
             }
             try {
-                if (!okno.playerComputer) {
+                if (!okno.playerComputer) { //regulowanei szybkości piłki dla człowieka i komputera jako 2 gracza
                     threadSleepTime = 60;
                 } else {
                     threadSleepTime = 40;
                 }
                 do {
-                    Thread.sleep(threadSleepTime);
+                    Thread.sleep(threadSleepTime); // zatrzymanie wątku podczas przerwy w grze
                 } while (okno.gamePause);
             } catch (Exception ex) {
                 System.out.println("Wyjątek w Shot.run :)");
@@ -130,11 +137,14 @@ class Shot extends Thread {
         okno.ballDirection = 0;
         okno.takenPoint = 0;
         okno.isNewServ = true;
-        if (okno.playerComputer && okno.servTwo) {
+        if (okno.playerComputer && okno.servTwo) { // wywołanie serwu komputera
             okno.shot();
         }
     }
-
+    
+/**
+ * Obliczenie współrzędnej X piłki na linii gracza 2
+ */
     public void pongAIxy() {
 
         int computerY = okno.pTwoY;
@@ -155,8 +165,12 @@ class Shot extends Thread {
         computerX = targetX;
         computeAI = false;
     }
-}
+} //pongAIxy
 
+/**
+ * Obsługa listenera myszki
+ * 
+ */
 class MyListener extends MouseAdapter {
 
     private NewProg21 okno;
@@ -165,6 +179,7 @@ class MyListener extends MouseAdapter {
         this.okno = okno;
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == 1) {
             if (okno.servOne) {
@@ -173,6 +188,7 @@ class MyListener extends MouseAdapter {
         }
     }
 
+    @Override
     public void mouseMoved(MouseEvent e) {
         if (!okno.gamePause) {
             if (e.getX() < okno.windowWidth - okno.pWidth) {
@@ -186,30 +202,29 @@ class MyListener extends MouseAdapter {
 
 public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
-    protected static int windowWidth = 800, windowHeight = 800;
-    protected int pWidth = 50, pHeight = 10;
+    protected static int windowWidth = 800, windowHeight = 800; // rozmiar pola gry
+    protected int pWidth = 50, pHeight = 10; // rozmiar paletek
     protected int windowMid = windowWidth / 2, toWindowCenter = windowMid - (pWidth / 2);
     protected int pOneX = toWindowCenter, pOneY = (windowHeight - 100), pTwoX = toWindowCenter, pTwoY = (windowHeight - (windowHeight - 100));
-    protected static int pOneScore = 0, pTwoScore = 0;
-    protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0;
-    protected int pSpeed = 12;
-    static int cSpeedFactor = 2;
-    protected boolean isMoveOne = false, isMoveTwo = false, servOne = true, servTwo = false, isNewServ = false;
-    static boolean playerComputer = false, gamePause = false, isStart = false, isSound = true;
+    protected static int pOneScore = 0, pTwoScore = 0; // wyniki graczy
+    protected int prevOneX = 0, prevTwoX = 0, prevBallX = 0, prevBallY = 0; // zmienne umożliwiające kasowanie poprzedniej pozycji paletki
+    protected int pSpeed = 12; // szybkośc gracza 2
+    static int cSpeedFactor = 2; // wspołczynnik sprawności komputera
+    protected boolean isMoveOne = false, isMoveTwo = false, servOne = true, servTwo = false, isNewServ = false; // flagi do ustalenia aktualnego stanu gry
+    static boolean playerComputer = false, gamePause = false, isStart = false, isSound = true; // flagi stanu gry
     protected static int ballX, ballY, ballDiameter = 10, ballDirection = 0, ballAngle = 0;
     protected int takenPoint = 0;
     static String pOneName = "Player 1", pTwoName = "Player 2";
-    
 
     public static void main(String[] args) {
         NewProg21 okno = new NewProg21("SwingPong -- Super Gra -- :)...");
         okno.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        okno.init();
+        okno.init(); // init pola gry
 
         StartWindow start = new StartWindow();
-        start.startWindow();
-        
-        while (!isStart) {
+        start.startWindow(); //uruchomienie okienka z wyborem opcji gry
+
+        while (!isStart) {  // pętla oczekiwania na naciśnięcie START
             try {
                 Thread.sleep(1000);
             } catch (Exception ex) {
@@ -218,7 +233,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         }
 
         ScoreWindow score = new ScoreWindow();
-        score.initScore();
+        score.initScore(); // init okienka z wynikiem
 
         JPanel pane = (JPanel) score.getContentPane();
         score.setVisible(true);
@@ -231,22 +246,26 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         MyListener mListener = new MyListener(okno);
         okno.addMouseListener(mListener);
         okno.addMouseMotionListener(mListener);
-    }
+    } //main
 
     NewProg21(String tytul) {
         super(tytul);
     }
 
+    
+    /**
+     * Inicjalizacja parametrów okienka z polem gry
+     */
     void init() {
         Container cp = getContentPane();
         setBackground(Color.BLACK);
         setSize(windowWidth, windowHeight);
         setResizable(false);
-    }
+    } // ini
 
     /**
-     * Inicjalizacja strzalu - uruchomienie watka zmieniajacego wspolrzedne
-     * strzalu.
+     * Inicjalizacja strzału - uruchomienie wątka zmieniającego współrzędne
+     * strzału.
      */
     void shot() {
         if (ballDirection == 0) {
@@ -276,8 +295,11 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 new Shot(this).start();
             }
         }
-    }
+    } // shot()
 
+    /**
+     * Obsługa rozpoczęcia gry przez komputer
+     */
     void servComputer() {
         isNewServ = true;
         Random r = new Random();
@@ -311,8 +333,15 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 isMoveTwo = true;
             }
         }
-    }
+    } // servComputer()
 
+    /**
+     * Ustalenie w którą stornę poleci piłka przy serwie gracza 1, zależnie od
+     * pozycji paletki względem osi okna
+     *
+     * @return zwraca (1) gdy paletka jest po prawej stronie okienka i piłka
+     * ruszy w prawo, (-1) gdy w lewo
+     */
     int pOneStartAngle() {
         int pOneXmid = pOneX + (pWidth / 2);
         if (pOneXmid > windowMid) {
@@ -322,19 +351,30 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             return -1;
         }
         return 0;
-    }
+    } // pOneStartAngle()
 
+    /**
+     * Ustalenie w którą stornę poleci piłka przy serwie gracza 2, zależnie od
+     * pozycji paletki względem osi okna
+     *
+     * @return zwraca (1) gdy paletka jest po prawej stronie okienka i piłka
+     * ruszy w prawo, (-1) gdy w lewo
+     */
     int pTwoStartAngle() {
         int pTwoXmid = pTwoX + (pWidth / 2);
         if (pTwoXmid > windowMid) {
             return 1;
-        }
-        if (pTwoXmid < windowMid) {
+        } else if (pTwoXmid < windowMid) {
             return -1;
         }
         return 0;
-    }
+    } // pTwoStartAngle()
 
+    /**
+     * Poruszanie górną paletką za pomocą klawiatury
+     *
+     * @param pDirection kierunek ruchu (1) w prawo, (-1) w lewo
+     */
     void moveP2(int pDirection) {
         if (!gamePause) {
             if (pDirection == 1 && pTwoX < windowWidth - pWidth - 3) {
@@ -347,9 +387,14 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
                 isMoveTwo = true;
             }
         }
-    }
+    } // moveP2
 
-    public void paint(Graphics g) { // metoda odrysowujaca ekran
+    /**
+     * Rysowanie okna z polem gry, kasowanie tylko obszarów piłki i paletek
+     * 
+     * @param g 
+     */
+    public void paint(Graphics g) { 
 
         g.setColor(Color.WHITE);
 
@@ -408,6 +453,7 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             }
         }
     }
+    
 //obsluga zdarzen z klawiatury
 
     public void keyTyped(KeyEvent e) {
