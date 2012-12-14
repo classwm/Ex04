@@ -17,10 +17,11 @@ class Shot extends Thread {
     Shot(NewProg21 okno) {
         this.okno = okno;
     }
-    
-/**
- * Wątek obsługi zmiany pozycji piłki, sprawdzenie kolizji, zmiana pozycji gracza sterowanego przez komputer
- */
+
+    /**
+     * Wątek obsługi zmiany pozycji piłki, sprawdzenie kolizji, zmiana pozycji
+     * gracza sterowanego przez komputer
+     */
     public void run() {
 
         while (okno.takenPoint == 0) {
@@ -141,10 +142,10 @@ class Shot extends Thread {
             okno.shot();
         }
     }
-    
-/**
- * Obliczenie współrzędnej X piłki na linii gracza 2
- */
+
+    /**
+     * Obliczenie współrzędnej X piłki na linii gracza 2
+     */
     public void pongAIxy() {
 
         int computerY = okno.pTwoY;
@@ -169,7 +170,7 @@ class Shot extends Thread {
 
 /**
  * Obsługa listenera myszki
- * 
+ *
  */
 class MyListener extends MouseAdapter {
 
@@ -252,7 +253,6 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
         super(tytul);
     }
 
-    
     /**
      * Inicjalizacja parametrów okienka z polem gry
      */
@@ -391,10 +391,10 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
 
     /**
      * Rysowanie okna z polem gry, kasowanie tylko obszarów piłki i paletek
-     * 
-     * @param g 
+     *
+     * @param g
      */
-    public void paint(Graphics g) { 
+    public void paint(Graphics g) {
 
         g.setColor(Color.WHITE);
 
@@ -453,9 +453,8 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             }
         }
     }
-    
-//obsluga zdarzen z klawiatury
 
+//obsluga zdarzen z klawiatury
     public void keyTyped(KeyEvent e) {
         // te metode zostawie jako pusta
     }
@@ -484,12 +483,10 @@ public class NewProg21 extends JFrame implements KeyListener, Runnable {
             case KeyEvent.VK_ESCAPE:
                 if (!gamePause) {
                     gamePause = true;
-                    System.out.println("Pause true!");
                     ScoreWindow.isGamePaused = true;
                     (new PauseWindow()).pauseWindow();
                 } else if (gamePause) {
                     gamePause = false;
-                    System.out.println("Pause false!");
                     ScoreWindow.isGamePaused = false;
                 }
                 break;
