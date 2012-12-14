@@ -161,13 +161,13 @@ public class StartWindow extends JFrame implements ActionListener {
             JScrollPane jsp = new JScrollPane(text, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
             try {
                 BufferedReader in = new BufferedReader(new FileReader(file));
-                String s = new String();
+                String s;
                 while ((s = in.readLine()) != null) {
                     text.append(s + "\n\r");
                 }
                 text.setEditable(false);
-                jsp.getViewport().add(text);
-                JOptionPane.showMessageDialog(bInfo, jsp);
+                jsp.getViewport().add(text);                
+                JOptionPane.showMessageDialog(bInfo, jsp, "SwingPong - Informacje", JOptionPane.INFORMATION_MESSAGE);
             } catch (FileNotFoundException ex) {
                 System.out.println("Brak pliku.");
             } catch (IOException ex) {
