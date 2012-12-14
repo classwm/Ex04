@@ -11,14 +11,20 @@ import javax.swing.*;
 public class StartWindow extends JFrame implements ActionListener {
 
     JFrame frame;
-    ButtonGroup myGroup1 = null;
-    ButtonGroup myGroup2 = null;
-    JLabel myLabel = null;
-    JLabel myLabel1 = null;
-    JLabel myLabel2 = null;
+    ButtonGroup myGroup1;
+    ButtonGroup myGroup2;
+    
+    JLabel myLabel;
+    JLabel myLabel1;
+    JLabel myLabel2;
+    
+    JRadioButton rbMaszyna;
+    JRadioButton rbNormal;
+    
     JRadioButton Player2;
     JButton bStart;
     JButton bInfo;
+    JCheckBox cbSound;
     JPanel panel2;
     JButton bPlayerOneName;
     JButton bPlayerTwoName;
@@ -43,26 +49,7 @@ public class StartWindow extends JFrame implements ActionListener {
         c.setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-
-        myLabel1 = new JLabel("POZIOM KOMPUTERA:", SwingConstants.CENTER);
-        myGroup1 = new ButtonGroup();
-        panel.add(myLabel1);
-
-
-        JRadioButton Retard = new JRadioButton("Retard");
-        myGroup1.add(Retard);
-        panel.add(Retard);
-
-        JRadioButton Normal = new JRadioButton("Normal");
-        myGroup1.add(Normal);
-        panel.add(Normal);
-
-        Normal.setSelected(true);
-
-        JRadioButton Maszyna = new JRadioButton("Maszyna      ");
-        myGroup1.add(Maszyna);
-        panel.add(Maszyna);
+        panel.setLayout(new FlowLayout());        
 
         c.add(panel, BorderLayout.EAST);
 
@@ -76,33 +63,52 @@ public class StartWindow extends JFrame implements ActionListener {
         myGroup2.add(Player2);
         panel.add(Player2);
 
-        JRadioButton Komputer = new JRadioButton("Komputer");
+        JRadioButton Komputer = new JRadioButton("Komputer      ");
         myGroup2.add(Komputer);
         panel.add(Komputer);
 
         Player2.setSelected(true);
 
         c.add(panel, BorderLayout.WEST);
+        
+        myLabel1 = new JLabel("POZIOM KOMPUTERA:", SwingConstants.CENTER);
+        myGroup1 = new ButtonGroup();
+        panel.add(myLabel1);       
 
+        rbNormal = new JRadioButton("Normalny");
+        myGroup1.add(rbNormal);
+        panel.add(rbNormal);
 
-        JPanel p1 = new JPanel();
-        p1.setLayout(new FlowLayout());
+        rbNormal.setSelected(true);
+
+        rbMaszyna = new JRadioButton("Maszyna      ");
+        myGroup1.add(rbMaszyna);
+        panel.add(rbMaszyna);
+
+        cbSound = new JCheckBox("Dźwięk");
+        cbSound.setSelected(true);
+        panel.add(cbSound);
+        
+        JPanel panel3 = new JPanel();
+        panel3.setLayout(new FlowLayout());
         bStart = new JButton("START GRY");
         bStart.addActionListener(this);
+        frame.getRootPane().setDefaultButton(bStart);
         bInfo = new JButton("Informacje");
         bInfo.addActionListener(this);
-        p1.add(bStart);
-        p1.add(bInfo);
-        c.add(p1, BorderLayout.SOUTH);
+        
+        panel3.add(bStart);
+        panel3.add(bInfo);
+        c.add(panel3, BorderLayout.SOUTH);
 
         panel2 = new JPanel();
-        p1.setLayout(new FlowLayout());
+        panel3.setLayout(new FlowLayout());
         bPlayerOneName = new JButton("Imię gracza 1 - " + NewProg21.pOneName);
         bPlayerOneName.addActionListener(this);
         bPlayerTwoName = new JButton("Imię gracza 2 - " + NewProg21.pTwoName);
         bPlayerTwoName.addActionListener(this);
-        p1.add(bPlayerOneName);
-        p1.add(bPlayerTwoName);
+        panel3.add(bPlayerOneName);
+        panel3.add(bPlayerTwoName);
         c.add(panel2);
 
         frame.pack();
@@ -111,12 +117,6 @@ public class StartWindow extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-//        ButtonModel b = myGroup1.getSelection();
-//        String t = "Not selected";
-//        if (b != null) {
-//            t = b.getActionCommand();
-//        }
-//        myLabel.setText(t);
 
         if (e.getSource() == bPlayerOneName) {
             String playerOneName = JOptionPane.showInputDialog(null,
@@ -149,7 +149,7 @@ public class StartWindow extends JFrame implements ActionListener {
 //            myLabel.setText(t);
 
             NewProg21.isStart = true;
-            frame.setVisible(false);            
+            frame.setVisible(false);
         }
     }
 }
